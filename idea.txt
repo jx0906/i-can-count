@@ -1,0 +1,29 @@
+idea: Card game for kids (up to 3 levels)
+
+things i will need to code:
+- let player choose choice of play (arithmetric to 10)
+    > lvl 1: 6 cards;
+    > lvl 2: 10 cards;
+    > lvl 3: 20 cards;
+- initialisation function
+    > arithmetric: 3/5/10 sets of card which add to 10 - cards are opened by default
+- countdown timer (for next level): 1 min
+- feedback for when cards are chosen, eg, choose 5, then the card is marked "active" or it appears somewhere like 5 + ? = 10
+- matching logic (ie, when the cards add to 10); feedback - confetti when matched; try again when wrong
+- gameWin logic (ie, check for "match" amongst all cards)
+    > proceed to level 2 if clear level 1 within time. add timerBal points for proceeding to next level. 
+    > if not, game to exit with motivational message
+
+/if time permits:
+- let users decide what is that number they want for the summation; or maybe multiplication? 
+- have animation to show dinosaur catching up with the prey (as a proxy for timer)
+- keeping a scoreboard of players' history
+
+info I need to "preload" into the code:
+- scope for the numbers (to 100?)
+- motivational messages depending on score 
+
+data i need to store:
+- aft initialisation, what the randomly generated cards are
+- status of cards, ie, which are matched (covered or disposed for chosen cards)
+- player score: 10 points for every match, 10 points for clearing within time. 
