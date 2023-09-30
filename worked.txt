@@ -1,0 +1,31 @@
+const cardCombi = [
+    [1, 9],
+    [2, 8],
+    [3, 7],
+    [4, 6],
+    [5, 5]
+]
+
+class card {
+    constructor(value, status, selection) {
+    this.value = value;
+    this.status= status;
+    this.selection = selection;
+    }
+}
+
+let cardArray = [];
+
+function createCards() {
+    for (i = 0; i < 3; i++) {
+        const randomIndex = Math.floor(Math.random() * cardCombi.length);
+        let combiToCreate = [cardCombi[randomIndex]];
+        var cardA = new card(combiToCreate[0][0], "active", "playerNotSel");
+        var cardB = new card(combiToCreate[0][1], "active", "playerNotSel");
+      console.log("round " + i + combiToCreate[0][0] + "and" + combiToCreate[0][1]);
+      cardArray.push(cardA, cardB);
+      }
+      console.log(cardArray);
+}
+
+createCards();

@@ -1,4 +1,34 @@
-idea: Card game for kids (up to 3 levels)
+1. **Analyze the app's functionality**: The app's features, from the user's point of view, should be described using _User Stories_.
+
+2. **Think about the overall design (look & feel) of the app**
+
+3. **Wireframe the UI** - no need
+
+    Wireframes provide a blueprint for the HTML & CSS. Wireframes also help reveal an application's state (data) and functionality.
+
+4. **Pseudocode**
+
+   Pseudocode outlines the app's logic using plain language. It provides a road map to writing the code itself. For example,
+   pseudocoding the logic for when a player makes a move, checking if the game has been won, etc., will prove to be helpful when
+   writing the actual code.
+
+5. **Identify the application's state (data)**
+
+    What does the application need to "remember" throughout its execution?
+    Use the wireframe and pseudocode to help identify what state needs to be tracked.
+
+6. **Set up the project** - done
+
+7. **Create a local repo** - done
+
+8. **Organize the app's JS into sections** - done
+
+9. **Code away!**
+
+10. **Make frequent git commits**
+
+
+## Game idea: Card game for kids (up to 3 levels)
 
 things i will need to code:
 - let player choose choice of play (arithmetric to 10)
@@ -17,6 +47,7 @@ things i will need to code:
 /if time permits:
 - let users decide what is that number they want for the summation; or maybe multiplication? 
 - have animation to show dinosaur catching up with the prey (as a proxy for timer)
+- keeping score (eg, add timerBal points for proceeding to next level. )
 - keeping a scoreboard of players' history
 
 info I need to "preload" into the code:

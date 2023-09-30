@@ -1,0 +1,23 @@
+*{
+    box-sizing: border-box;
+  }
+  
+  body {
+    margin: 50px;
+    font-family: Helvetica;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 10px;
+    /* background-image: url("background.jpg") */
+  }
+
+  cards {
+    width: 80px;
+    height: 80px;
+    display: flex;
+  }
+
+

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I CAN COUNT!</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <h1 id="title"><strong>I can count!</strong></h1>
+
+    <nav id="instructions">
+        <h2>Instructions</h2><br>This is a counting game. Given a deck of cards, choose two cards that add up to 10.<br>Game will
+        continue until the cards are cleared or when time's up, whichever is earlier. <br>You can advance to the next level if you clear
+        the cards before time's up.
+
+        Think you're up to the challenge?<br><br>
+
+        <button id="play-button">Start Game!</button>
+    </nav>
+
+    <main id ="game-area">
+
+        <div id="game-state">
+            <h3 id="timer-display"></h3>
+            <h4 id="game-status"></h4>
+        </div>
+        <div id="game-cards"></div>
+
+    </main>
+</body>
+</html>
