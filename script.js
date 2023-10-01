@@ -105,7 +105,7 @@ function initialize() {
     gameState.level = game1.getGameLevel();
     gameState.cardsLeft = game1.getTotalGameCards();
     createCards(game1.getTotalGameCards());
-    updateCountdown(); 
+    const timer = setInterval(updateCountdown, 1000); // use setInterval to call the updateCountdown function every second (1000 milliseconds).  
     rStartGame();
 }
 
@@ -196,15 +196,18 @@ function updateCountdown() {
     // can use new Date.getTime() if you want to be very accurate about tmekeeping cos 1000 miliseconds != exactly 1sec. its more of 1.03 s.
     // var now = new Date().getTime(); var targetTime = 1 minute later (need to find the exact code)
 
-    const seconds = gameState.timeLeft % 60; // how to get rid of the 0 s which appears at the start when gameState.timeLeft = 60 and 60%60  =0 
-    timerDisplay.textContent = `${seconds} s`;
-    const timer = setInterval(updateCountdown, 1000); // use setInterval to call the updateCountdown function every second (1000 milliseconds).  
+    const seconds = gameState.timeLeft % 60; 
     // If the count down is finished, 
-    if (gameState.timeLeft === 0) {
+    if (gameState.timeLeft <= 0) {
       clearInterval(timer);
       timerDisplay.textContent = "TIME'S UP!";
       return;
     }
+    if (gameState.timeLeft === 60) {
+        timerDisplay.textContent = "1 minute"; // need to specify this so we don't see "0 s" at the start when gameState.timeLeft = 60 and 60%60  =0  (if left to else stmt alone)
+    }
+    else {timerDisplay.textContent = `${seconds} s`;}
+    
     gameState.timeLeft--;
   };
 
