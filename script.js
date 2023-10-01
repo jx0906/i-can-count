@@ -33,7 +33,7 @@ class card {
     this.value = value;
     this.status= status;
     this.selection = selection;
-    this.label = "label"; //optional argument?
+    this.label = "label"; //optional argument
     }
 
     getCardLabel() {
@@ -60,13 +60,13 @@ class card {
         this.value = val;
     }
 
-    setCardSelection(playerNotSel) {
-        this.selection = playerNotSel;
+    setCardSelection(newSel) {
+        this.selection = newSel;
     }
 
-    setCardStatus(inactive, playerNotSel) {
-        this.status = inactive;
-        this.selection = playerNotSel;
+    setCardProfile(newStatus, newSel) {
+        this.status = newStatus;
+        this.selection = newSel;
     }
 }
 // class Player - if i want to do scoreboard
@@ -105,14 +105,13 @@ function initialize() {
     gameState.level = game1.getGameLevel();
     gameState.cardsLeft = game1.getTotalGameCards();
     createCards(game1.getTotalGameCards());
-    const timer = setInterval(updateCountdown, 1000); // use setInterval to call the updateCountdown function every second (1000 milliseconds).  
     rStartGame();
+    const timer = setInterval(updateCountdown, 1000); // use setInterval to call the updateCountdown function every second (1000 milliseconds).  
 }
 
 function createCards(totalCardsToCreate) {
     while (gameCards.hasChildNodes()) {
-        gameCards.
-        removeChild(gameCards.firstChild);
+        gameCards.removeChild(gameCards.firstChild);
     }
 
     for (i = 0; i < (totalCardsToCreate /2); i++) {
@@ -140,37 +139,57 @@ function handleMove(evt) {
 
     // "id" is a DOM property so you  have to be on the DOM element object to use it.
     let idx = parseInt(evt.target.id.replace('card ', ''));
-    // console.log(idx);
+    console.log(idx);
     let clickedCard = cardArray[idx];
     console.log(clickedCard); // returns an object
-    //clickedCard.getCardSelection() doesn't work. is it cos clickedCard is not governed by the class properties as an object?
 
     let clickedCardSel = clickedCard.getCardSelection();
     console.log(clickedCardSel);
-
-    if (clickedCardSel === "playerSel") {
-        clickedCard.setCardSelection("playerNotSel");
-        gameState.firstCardSel = null;
-        renderCards(evt);
-        return;
-    }
-    clickedCard.setCardSelection("playerSel");
-    // console.log(clickedCard);
-    // console.log(gameState.firstCardSel);
+    console.log(gameState.firstCardSel);
+    if (gameState.firstCardSel != null) {
+        if (clickedCardSel === "playerSel") {
+            clickedCard.setCardSelection("playerNotSel");
+            gameState.firstCardSel = null;
+            renderCards(evt);
+            return;
+        }
+        else { //clickedCardSel === "playerNotSel"
+            clickedCard.setCardSelection("playerSel");
+            // console.log(clickedCard);
+            // console.log(gameState.firstCardSel);
+            renderCards(evt);
+            checkSum(gameState.firstCardSel, clickedCard);
+            // checkWin();
+            return;
+        }
+    };
+    //gameState.firstCardSel === null
+    clickedCard.setCardSelection("playerSel");    
     gameState.firstCardSel = clickedCard;
     console.log(gameState.firstCardSel);
     renderCards(evt);
     return;
     }
 
-// to check card.selection of clicked card (evt.target)
-    // if "playerSel", update to "playerNotSel" (make sure renderView also updates accordingly, ie, selectionDisplay.textContent = "? + ? = 10 " )
-    // if "playerNotSel", update to "playerSel"
-        // if gameState.firstCardSel = NULL, set clickedCard = gameState.firstCardSel and return; (make sure correspondingly in renderView, selectionDisplay.textContent with "clickedCard value + ? = 10 ")
-        // if gameState.firstCardSel != NULL, checkSum, checkWin
-// render()
-
-// checkSum, ie,
+function checkSum (firstCardSel, secCardSel) {
+    if (firstCardSel.getCardValue() + secCardSel.getCardValue() === 10) {
+        firstCardSel.setCardProfile("inactive", "playerNotSel");
+        secCardSel.setCardProfile("inactive", "playerNotSel");
+        // console.log(firstCardSel,secCardSel);
+        // console.log(cardArray);
+        
+        const updatedCardArray = cardArray.filter(dropCard);
+        function dropCard(card) {
+             return card !== firstCardSel && card !== secCardSel;
+            }
+        
+        gameState.cardsLeft = updatedCardArray.length;
+        return;
+    }
+    firstCardSel.setCardSelection("playerNotSel");
+    secCardSel.setCardSelection("playerNotSel");
+    return;
+}
 // if sum of cards add up to 10,
     // update for both selected cards: card.status = 'inactive' and card.selection = "playerNotSel"
     // cardArray.pop the two cards (renderMessage to prompt "bingo!" and renderView to remove display of selected cards) 
@@ -195,20 +214,19 @@ function updateCountdown() {
     // Set end time to be 1 min later (ie, 60000 miliseconds)
     // can use new Date.getTime() if you want to be very accurate about tmekeeping cos 1000 miliseconds != exactly 1sec. its more of 1.03 s.
     // var now = new Date().getTime(); var targetTime = 1 minute later (need to find the exact code)
-
     const seconds = gameState.timeLeft % 60; 
     // If the count down is finished, 
-    if (gameState.timeLeft <= 0) {
-      clearInterval(timer);
-      timerDisplay.textContent = "TIME'S UP!";
-      return;
-    }
     if (gameState.timeLeft === 60) {
         timerDisplay.textContent = "1 minute"; // need to specify this so we don't see "0 s" at the start when gameState.timeLeft = 60 and 60%60  =0  (if left to else stmt alone)
     }
     else {timerDisplay.textContent = `${seconds} s`;}
-    
     gameState.timeLeft--;
+
+    if (gameState.timeLeft === 0) {
+        timerDisplay.textContent = "TIME'S UP!";
+        clearInterval(timer);
+      }
+    return;
   };
 
 // for game start and game refresh (ie, new level)
@@ -216,7 +234,7 @@ function rStartGame() {
     playButton.textContent = 'Replay!';
     rCreateCards();
     gameStatus.textContent = 'Your time starts now!'
-    setInterval(newMessage, 500);
+    setTimeout(newMessage, 500); // setTimeout (not setInterval) cos you only want it to run once 
 }
 
 function newMessage() {
@@ -241,10 +259,11 @@ function renderCards(event) {
     if (hasplayerSelClass) {
         selCard.classList.replace('playerSel', 'playerNotSel');
         gameStatus.textContent = '? + ? = 10'
+        return;
     }
     selCard.classList.replace('playerNotSel', 'playerSel');
-    console.log(selCard.textContent);
     gameStatus.textContent = `${selCard.textContent} + ? = 10`;
+    return;
 };
 
 // Reference: Fisher-Yates shuffle algorithm
