@@ -3,7 +3,6 @@
   }
 
   body {
-    margin: 50px;
     font-family: Helvetica;
     display: flex;
     flex-direction: column;
@@ -11,7 +10,14 @@
     justify-content: center;
     align-items: center;
     gap: 5px;
-    /* background-image: url("background.jpg") */
+    background: url("background.jpg") no-repeat center;
+    background-size: 120%;
+  }
+
+  #instructions {
+    background-color: transparent;
+    background-blend-mode: overlay;
+    border-style: double;
   }
 
   #game-state {
@@ -20,6 +26,10 @@
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+  }
+
+  #timer-display {
+    background-clip: border-box;
   }
 
   #game-cards {
