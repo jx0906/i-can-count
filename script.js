@@ -95,17 +95,15 @@ const gameCards = document.getElementById('game-cards');
 
 playButton.addEventListener('click', initialize);
 gameCards.addEventListener('click', handleMove);
-// to add event listener for time's up (no user action)?
 
 // functions
 
 function initialize() {
-    // gameCards.innerHTML = ''; //so that new gameCards can be created through the render function
     cardArray = [];
     gameState.level = game1.getGameLevel();
     gameState.cardsLeft = game1.getTotalGameCards();
     createCards(game1.getTotalGameCards());
-    rStartGame();
+    renderStartGame();
     const timer = setInterval(updateCountdown, 1000); // use setInterval to call the updateCountdown function every second (1000 milliseconds).  
 }
 
@@ -139,75 +137,69 @@ function handleMove(evt) {
 
     // "id" is a DOM property so you  have to be on the DOM element object to use it.
     let idx = parseInt(evt.target.id.replace('card ', ''));
-    console.log(idx);
+    // console.log(idx);
     let clickedCard = cardArray[idx];
-    console.log(clickedCard); // returns an object
+    // console.log(clickedCard); // returns an object
 
     let clickedCardSel = clickedCard.getCardSelection();
-    console.log(clickedCardSel);
-    console.log(gameState.firstCardSel);
+    // console.log(clickedCardSel);
+    // console.log(gameState.firstCardSel);
     if (gameState.firstCardSel != null) {
         if (clickedCardSel === "playerSel") {
             clickedCard.setCardSelection("playerNotSel");
             gameState.firstCardSel = null;
-            renderCards(evt);
+            renderCardSel(evt);
             return;
         }
-        else { //clickedCardSel === "playerNotSel"
-            clickedCard.setCardSelection("playerSel");
-            // console.log(clickedCard);
-            // console.log(gameState.firstCardSel);
-            renderCards(evt);
-            checkSum(gameState.firstCardSel, clickedCard);
-            // checkWin();
-            return;
+        //clickedCardSel === "playerNotSel"
+        clickedCard.setCardSelection("playerSel");
+        // console.log(clickedCard);
+        // console.log(gameState.firstCardSel);
+        renderCardSel(evt);
+        checkSum(gameState.firstCardSel, clickedCard);
+        gameState.firstCardSel = null;
+        checkWin();
+        return;
         }
-    };
     //gameState.firstCardSel === null
     clickedCard.setCardSelection("playerSel");    
     gameState.firstCardSel = clickedCard;
     console.log(gameState.firstCardSel);
-    renderCards(evt);
+    renderCardSel(evt);
     return;
     }
 
-function checkSum (firstCardSel, secCardSel) {
-    if (firstCardSel.getCardValue() + secCardSel.getCardValue() === 10) {
-        firstCardSel.setCardProfile("inactive", "playerNotSel");
-        secCardSel.setCardProfile("inactive", "playerNotSel");
-        // console.log(firstCardSel,secCardSel);
+function checkSum (firstCard, secCard) {
+    if (firstCard.getCardValue() + secCard.getCardValue() === 10) {
+        firstCard.setCardProfile("inactive", "playerNotSel");
+        secCard.setCardProfile("inactive", "playerNotSel");
+        console.log(firstCard,secCard);
         // console.log(cardArray);
         
-        const updatedCardArray = cardArray.filter(dropCard);
+        let updatedCardArray = cardArray.filter(dropCard);
         function dropCard(card) {
-             return card !== firstCardSel && card !== secCardSel;
+             return card.getCardStatus() == 'active';
             }
-        
         gameState.cardsLeft = updatedCardArray.length;
+        console.log(updatedCardArray);
+        renderCardStatus (firstCard, secCard);
+        checkWin();
         return;
     }
-    firstCardSel.setCardSelection("playerNotSel");
-    secCardSel.setCardSelection("playerNotSel");
+    firstCard.setCardSelection("playerNotSel");
+    secCard.setCardSelection("playerNotSel");
+    renderCardStatus(firstCard, secCard);
     return;
 }
-// if sum of cards add up to 10,
-    // update for both selected cards: card.status = 'inactive' and card.selection = "playerNotSel"
-    // cardArray.pop the two cards (renderMessage to prompt "bingo!" and renderView to remove display of selected cards) 
-    // gameState.firstCardSel = NULL
-    // gameState.cardsLeft should be updated by association of cardArray.length? -> to confirm
-// else, for both cards: card.status = 'active' and card.selection = "playerNotSel" (renderMessage to prompt "let's try again!" and renderView to
-// unselect cards)
 
-// checkWin, ie, time and no. of cards left
-// - if gameState.timeleft = 0, check
-    //  - if gameState.cardsLeft =0, call updateGame function (renderMessage "Good Job! On to the next challenge now!") 
-    //  - if gameState.cardsLeft > 0, call resetGame function (renderMessage "Aw, time's up! Shall we try again?") 
-// - if gameState.timeleft > 0, check
-    // - if gameState.cardsLeft =0, refreshGame (renderMessage "Good Job! On to the next challenge now!")
-    // - if gameState.cardsLeft > 0, continue
-
-// updateGame, refresh game for next level 
-
+function checkWin() {
+    if ((gameState.timeLeft >= 0 && gameState.cardsLeft == 0) || (gameState.timeLeft <= 0 && gameState.cardsLeft > 0)) {
+        renderMessage();
+        return;
+    }
+    // gameState.timeLeft > 0 && gameState.cardsLeft > 0) 
+    return;
+    }
 
 // Update the count down every 1 second
 function updateCountdown() {
@@ -224,24 +216,80 @@ function updateCountdown() {
 
     if (gameState.timeLeft === 0) {
         timerDisplay.textContent = "TIME'S UP!";
+        checkWin();
         clearInterval(timer);
       }
     return;
   };
 
-// for game start and game refresh (ie, new level)
-function rStartGame() {
-    playButton.textContent = 'Replay!';
-    rCreateCards();
+function resetGame() {
+    renderCreateCards();
     gameStatus.textContent = 'Your time starts now!'
     setTimeout(newMessage, 500); // setTimeout (not setInterval) cos you only want it to run once 
+}
+
+function updateGame() {
+    cardArray = [];
+    if (gameState.level = game1.getGameLevel()) {
+        gameState.level = game2.getGameLevel();
+        gameState.cardsLeft = game2.getTotalGameCards();
+        createCards(game2.getTotalGameCards());
+    };
+    if (gameState.level = game2.getGameLevel()) { 
+    gameState.level = game3.getGameLevel();
+    gameState.cardsLeft = game3.getTotalGameCards();
+    createCards(game3.getTotalGameCards());
+    }
+    renderStartGame();
+    const timer = setInterval(updateCountdown, 1000);
 }
 
 function newMessage() {
     gameStatus.textContent = '? + ? = 10'
 };
 
-function rCreateCards() {
+
+// for game start and game refresh (ie, new level)
+function renderStartGame() {
+    document.getElementById('instructions').style.display = "block";
+    document.getElementById('updated-instructions').style.display = "none";
+    timerDisplay.style.display = "block";
+    renderCreateCards();
+    gameStatus.textContent = 'Your time starts now!'
+    setTimeout(newMessage, 500); // setTimeout (not setInterval) cos you only want it to run once 
+}
+
+function renderMessage() {
+    gameStatus.textContent = '';
+    timerDisplay.style.display = "none";
+    document.getElementById('instructions').style.display = "none";
+    let replay = document.getElementById('replay');
+    let nextLevel = document.getElementById('next-level');
+    let newGame = document.getElementById('new-game');
+    
+    let updatedInstructions = document.getElementById('updated-instructions');
+    updatedInstructions.style.display = "block";
+
+    if (gameState.timeLeft <= 0 && gameState.cardsLeft > 0) {
+        updatedInstructions.innerHTML = 'Good attempt! Shall we try again?'+ '<br><br><button id = "replay">Ok! I can do this!</button>';
+        replay.addEventListener('click', initialize);
+        return;
+    }
+    if (gameState.timeLeft >= 0 && gameState.cardsLeft == 0) {
+        if (gameState.level == game1.getGameLevel() || gameState.level == game2.getGameLevel()) {
+        updatedInstructions.innerHTML = 'That was awesome! Shall we move on to the next challenge?' +
+        '<br><br><button id = "next-level">Challenge Accepted!</button>';
+        nextLevel.addEventListener('click', updateGame);
+        return;
+    }
+    updatedInstructions.innerHTML = 'You did an amazing job! Would you like to play again?' +
+    '<br><br><button id = "new-game">Replay!</button>';
+    newGame.addEventListener('click', initialize);
+    return;
+}
+}
+
+function renderCreateCards() {
     for (let i = 0; i < cardArray.length; i++) {
         //this will lead to the same effect as having </div><div> in the .game-board HTML elem to facilitate css styling, js functions
         let gCard = document.createElement('div');
@@ -253,18 +301,41 @@ function rCreateCards() {
     };
 }
 
-function renderCards(event) {
-    const selCard = document.getElementById(event.target.id);
-    const hasplayerSelClass = selCard.classList.contains('playerSel');
-    if (hasplayerSelClass) {
+function renderCardSel(event) {
+    let selCard = document.getElementById(event.target.id);
+    let firstCard = document.querySelector('.firstCardSel');
+    // console.log(firstCard);
+
+    if (firstCard != null) {
+        if (selCard.classList.contains('playerSel')) {
         selCard.classList.replace('playerSel', 'playerNotSel');
+        selCard.classList.remove('firstCardSel');
         gameStatus.textContent = '? + ? = 10'
         return;
     }
     selCard.classList.replace('playerNotSel', 'playerSel');
-    gameStatus.textContent = `${selCard.textContent} + ? = 10`;
+    gameStatus.textContent = `${firstCard.textContent} + ${selCard.textContent} = 10`;
+    return;
+    }
+    selCard.classList.replace('playerNotSel', 'playerSel');
+    selCard.classList.add("firstCardSel");
+    gameStatus.textContent = `${selCard.textContent} + ? = 10`
     return;
 };
+
+function renderCardStatus (firstCard, secCard) {
+    let card1 = document.getElementById(firstCard.getCardLabel());
+    let card2 = document.getElementById(secCard.getCardLabel());
+
+    //for checkSum, the two selected cards would already be "active" and "playerSel" so we just replace with whatever status and selection
+    // info was assigned in the Model (after the win eligibility checks, ie = 10)
+    card1.classList.replace('active', firstCard.getCardStatus());
+    card2.classList.replace('active', secCard.getCardStatus());
+    card1.classList.replace('playerSel', firstCard.getCardSelection());
+    card2.classList.replace('playerSel', secCard.getCardSelection());
+    gameStatus.textContent = '? + ? = 10';
+    card1.classList.remove('firstCardSel'); //because firstCard in my function arguement is always defined as gameState.firstCardSel
+}
 
 // Reference: Fisher-Yates shuffle algorithm
 function shuffleArray(array) {

@@ -20,6 +20,13 @@
     border-style: double;
   }
 
+  #updated-instructions {
+    background-color: transparent;
+    background-blend-mode: overlay;
+    border-style: double;
+    display: none;
+  }
+
   #game-state {
     display: flex;
     flex-direction: column;
