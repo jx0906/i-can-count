@@ -263,6 +263,7 @@ function renderMessage() {
     gameStatus.textContent = '';
     timerDisplay.style.display = "none";
     document.getElementById('instructions').style.display = "none";
+
     let replay = document.getElementById('replay');
     let nextLevel = document.getElementById('next-level');
     let newGame = document.getElementById('new-game');
@@ -271,6 +272,7 @@ function renderMessage() {
     updatedInstructions.style.display = "block";
 
     if (gameState.timeLeft <= 0 && gameState.cardsLeft > 0) {
+        ???? let gCard = document.createElement('button');
         updatedInstructions.innerHTML = 'Good attempt! Shall we try again?'+ '<br><br><button id = "replay">Ok! I can do this!</button>';
         replay.addEventListener('click', initialize);
         return;
