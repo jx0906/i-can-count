@@ -93,7 +93,7 @@ const timerDisplay = document.getElementById('timer-display');
 const gameStatus = document.getElementById('game-status');
 const gameCards = document.getElementById('game-cards');
 const updatedInstructions = document.getElementById('updated-instructions');
-const nGame = document.getElementById('ngame');
+const nGame = document.getElementById('ngame-button');
 
 // event listeners
 
@@ -237,8 +237,11 @@ function nextSteps() {
         updateGame();
         return;
         }
+        //gameState.level == game3.getGameLevel()
         initialize();
 };
+    //gameState.timeLeft <= 0, gameState.cardsLeft !=0
+    initialize();
 }
 
 function updateGame() {
@@ -249,10 +252,13 @@ function updateGame() {
         gameState.level = game2.getGameLevel();
         gameState.cardsLeft = game2.getTotalGameCards();
         createCards(game2.getTotalGameCards());
+        return;
     };
-    {gameState.level = game3.getGameLevel();
+    if (gameState.level == game2.getGameLevel()) {
+    gameState.level = game3.getGameLevel();
     gameState.cardsLeft = game3.getTotalGameCards();
     createCards(game3.getTotalGameCards());
+    return;
     }
     renderStartGame();
     timer = setInterval(function () {
@@ -298,12 +304,12 @@ function renderMessage() {
     if (gameState.timeLeft >= 0 && gameState.cardsLeft == 0) {
         if (gameState.level == game1.getGameLevel() || gameState.level == game2.getGameLevel()) {
         updatedInstructions.innerHTML = 'That was awesome! Shall we move on to the next challenge?';
-        nGame.textContent = "Challenge Accepted!";      
+        nGame.textContent = "Ok! Challenge Accepted!";      
         return;
         }
-    updatedInstructions.innerHTML = 'You did an amazing job! Would you like to play again?';
-    nGame.textContent = "Replay!";
-    return;
+        updatedInstructions.innerHTML = 'You did an amazing job! Would you like to play again?';
+        nGame.textContent = "Ok, let's do this again!";
+        return;
     }
 }
 
