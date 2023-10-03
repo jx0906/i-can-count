@@ -12,7 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Lemonada:wght@600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- <div id = "background" style="background-image: url('background.jpg');"> </div> -->
     <h1 id="title"><strong>I CAN COUNT!</strong></h1>
 
     <nav id="instructions">
@@ -20,15 +19,15 @@
         continue until the cards are cleared or when time's up, whichever is earlier. <br>You can advance to the next level if you clear
         the cards before time's up.
 
-        Think you're up to the challenge?<br><br>
+        Ready for the challenge?<br><br>
 
         <button id="play-button">Start Game!</button>
     </nav>
 
-    <nav id="updated-instructions"></nav>
+    <div class = "next-game" id="updated-instructions"></div>
+    <button class = "next-game" id="ngame"></button>
 
     <main id ="game-area">
-
         <div id="game-state">
             <h2 id="game-status"></h2>
             <h2 id="timer-display"></h2>

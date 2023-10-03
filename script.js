@@ -16,8 +16,8 @@ class game {
 }
 
 var game1 = new game(1, 6);
-var game2 = new game(2,10);
-var game3 = new game(3,20);
+var game2 = new game(2, 10);
+var game3 = new game(3, 20);
 
 //based on cardValue
 const cardCombi = [
@@ -73,6 +73,8 @@ class card {
 
 // state variables
 
+let timer;
+
 let cardArray = [];
 
 //always try to set smth for the keys in the object
@@ -90,29 +92,53 @@ const playButton = document.getElementById('play-button');
 const timerDisplay = document.getElementById('timer-display');
 const gameStatus = document.getElementById('game-status');
 const gameCards = document.getElementById('game-cards');
+const updatedInstructions = document.getElementById('updated-instructions');
+const nGame = document.getElementById('ngame');
 
 // event listeners
 
 playButton.addEventListener('click', initialize);
 gameCards.addEventListener('click', handleMove);
+nGame.addEventListener('click', nextSteps);
 
 // functions
 
 function initialize() {
     cardArray = [];
+    clearInterval(timer); // it's ok to have this at the start of the game here even though timer is undefined; this is insurance for cases
+    // when people click on replay when the timer is still running midway - we want to make sure its reset to run properly (instead of counting
+    // down in (eg) double/triple quicktime) 
+    gameState.timeLeft = 60;
     gameState.level = game1.getGameLevel();
     gameState.cardsLeft = game1.getTotalGameCards();
     createCards(game1.getTotalGameCards());
     renderStartGame();
-    const timer = setInterval(updateCountdown, 1000); // use setInterval to call the updateCountdown function every second (1000 milliseconds).  
+    timer = setInterval(function () {
+        const seconds = gameState.timeLeft % 60; 
+        if (gameState.timeLeft === 60) {
+            timerDisplay.textContent = "1 minute"; // need to specify this so we don't see "0 s" at the start when gameState.timeLeft = 60 and 60%60  =0  (if left to else stmt alone)
+        }
+        else {timerDisplay.textContent = `${seconds} s`;}
+        gameState.timeLeft--;
+    
+        if (gameState.timeLeft <= 0) {
+            timerDisplay.textContent = "TIME'S UP!";
+            checkWin();
+            clearInterval(timer);
+          }
+        return;
+      }, 500); // use setInterval to call the updateCountdown function every second (60000 = 60 s; 1000 milliseconds = 1s).  
 }
 
-function createCards(totalCardsToCreate) {
-    while (gameCards.hasChildNodes()) {
-        gameCards.removeChild(gameCards.firstChild);
-    }
+// store timer as a global variable
+// elaborate on updateCountdown here instead of setting it as another standalone function
 
-    for (i = 0; i < (totalCardsToCreate /2); i++) {
+function createCards(totalCardsToCreate) {
+    // while (gameCards.hasChildNodes()) {
+    //     gameCards.removeChild(gameCards.firstChild);
+    // }
+
+    for (i = 0; i < (totalCardsToCreate/2); i++) {
         // get a random item from an array
         // get random index value
         const randomIndex = Math.floor(Math.random() * cardCombi.length);
@@ -126,7 +152,7 @@ function createCards(totalCardsToCreate) {
     for (j = 0; j < cardArray.length; j++) {
         cardArray[j].setCardLabel("card " + j); //want to do this so i can assign the created DOM element with the same label to facilitate
         // subsequent needs to check on the card class properties (eg, getClassSelection())
-    }
+    };
     // console.log(cardArray[1]); for debugging to confirm the cardLabel is rightly assigned
     }
 
@@ -201,97 +227,94 @@ function checkWin() {
     return;
     }
 
-// Update the count down every 1 second
-function updateCountdown() {
-    // Set end time to be 1 min later (ie, 60000 miliseconds)
-    // can use new Date.getTime() if you want to be very accurate about tmekeeping cos 1000 miliseconds != exactly 1sec. its more of 1.03 s.
-    // var now = new Date().getTime(); var targetTime = 1 minute later (need to find the exact code)
-    const seconds = gameState.timeLeft % 60; 
-    // If the count down is finished, 
-    if (gameState.timeLeft === 60) {
-        timerDisplay.textContent = "1 minute"; // need to specify this so we don't see "0 s" at the start when gameState.timeLeft = 60 and 60%60  =0  (if left to else stmt alone)
-    }
-    else {timerDisplay.textContent = `${seconds} s`;}
-    gameState.timeLeft--;
+function newMessage() {
+        gameStatus.textContent = '? + ? = 10'
+    };
 
-    if (gameState.timeLeft === 0) {
-        timerDisplay.textContent = "TIME'S UP!";
-        checkWin();
-        clearInterval(timer);
-      }
-    return;
-  };
-
-function resetGame() {
-    renderCreateCards();
-    gameStatus.textContent = 'Your time starts now!'
-    setTimeout(newMessage, 500); // setTimeout (not setInterval) cos you only want it to run once 
+function nextSteps() {
+    if (gameState.timeLeft >= 0 && gameState.cardsLeft == 0) {
+        if (gameState.level == game1.getGameLevel() || gameState.level == game2.getGameLevel()) {
+        updateGame();
+        return;
+        }
+        initialize();
+};
 }
 
 function updateGame() {
     cardArray = [];
-    if (gameState.level = game1.getGameLevel()) {
+    clearInterval(timer);
+    gameState.timeLeft = 60;
+    if (gameState.level == game1.getGameLevel()) {
         gameState.level = game2.getGameLevel();
         gameState.cardsLeft = game2.getTotalGameCards();
         createCards(game2.getTotalGameCards());
     };
-    if (gameState.level = game2.getGameLevel()) { 
-    gameState.level = game3.getGameLevel();
+    {gameState.level = game3.getGameLevel();
     gameState.cardsLeft = game3.getTotalGameCards();
     createCards(game3.getTotalGameCards());
     }
     renderStartGame();
-    const timer = setInterval(updateCountdown, 1000);
+    timer = setInterval(function () {
+        const seconds = gameState.timeLeft % 60; 
+        if (gameState.timeLeft === 60) {
+            timerDisplay.textContent = "1 minute"; // need to specify this so we don't see "0 s" at the start when gameState.timeLeft = 60 and 60%60  =0  (if left to else stmt alone)
+        }
+        else {timerDisplay.textContent = `${seconds} s`;}
+        gameState.timeLeft--;
+    
+        if (gameState.timeLeft <= 0) {
+            timerDisplay.textContent = "TIME'S UP!";
+            checkWin();
+            clearInterval(timer);
+          }
+        return;
+      }, 500);
 }
-
-function newMessage() {
-    gameStatus.textContent = '? + ? = 10'
-};
 
 
 // for game start and game refresh (ie, new level)
 function renderStartGame() {
     document.getElementById('instructions').style.display = "block";
-    document.getElementById('updated-instructions').style.display = "none";
+    playButton.textContent = "Replay!"
+    document.querySelectorAll('.next-game').forEach(a=>a.style.display = "none");
     timerDisplay.style.display = "block";
     renderCreateCards();
     gameStatus.textContent = 'Your time starts now!'
-    setTimeout(newMessage, 500); // setTimeout (not setInterval) cos you only want it to run once 
+    setTimeout(newMessage, 1000); // setTimeout (not setInterval) cos you only want it to run once 
 }
 
 function renderMessage() {
     gameStatus.textContent = '';
     timerDisplay.style.display = "none";
     document.getElementById('instructions').style.display = "none";
-
-    let replay = document.getElementById('replay');
-    let nextLevel = document.getElementById('next-level');
-    let newGame = document.getElementById('new-game');
-    
-    let updatedInstructions = document.getElementById('updated-instructions');
-    updatedInstructions.style.display = "block";
+    document.querySelectorAll('.next-game').forEach(a=>a.style.display = "block");
 
     if (gameState.timeLeft <= 0 && gameState.cardsLeft > 0) {
-        ???? let gCard = document.createElement('button');
-        updatedInstructions.innerHTML = 'Good attempt! Shall we try again?'+ '<br><br><button id = "replay">Ok! I can do this!</button>';
-        replay.addEventListener('click', initialize);
+        updatedInstructions.innerHTML = 'Good attempt! Shall we try again?<br><br>';
+        nGame.textContent = "Ok, let's go!";
         return;
     }
     if (gameState.timeLeft >= 0 && gameState.cardsLeft == 0) {
         if (gameState.level == game1.getGameLevel() || gameState.level == game2.getGameLevel()) {
-        updatedInstructions.innerHTML = 'That was awesome! Shall we move on to the next challenge?' +
-        '<br><br><button id = "next-level">Challenge Accepted!</button>';
-        nextLevel.addEventListener('click', updateGame);
+        updatedInstructions.innerHTML = 'That was awesome! Shall we move on to the next challenge?';
+        nGame.textContent = "Challenge Accepted!";      
         return;
-    }
-    updatedInstructions.innerHTML = 'You did an amazing job! Would you like to play again?' +
-    '<br><br><button id = "new-game">Replay!</button>';
-    newGame.addEventListener('click', initialize);
+        }
+    updatedInstructions.innerHTML = 'You did an amazing job! Would you like to play again?';
+    nGame.textContent = "Replay!";
     return;
-}
+    }
 }
 
+//click(Callback) - if state is x, initialise(), else....
+// remove eventlistener before i add
+
 function renderCreateCards() {
+    while (gameCards.hasChildNodes()) {
+        gameCards.removeChild(gameCards.firstChild);
+    }
+
     for (let i = 0; i < cardArray.length; i++) {
         //this will lead to the same effect as having </div><div> in the .game-board HTML elem to facilitate css styling, js functions
         let gCard = document.createElement('div');
@@ -312,7 +335,8 @@ function renderCardSel(event) {
         if (selCard.classList.contains('playerSel')) {
         selCard.classList.replace('playerSel', 'playerNotSel');
         selCard.classList.remove('firstCardSel');
-        gameStatus.textContent = '? + ? = 10'
+        newMessage();
+        // gameStatus.textContent = '? + ? = 10'
         return;
     }
     selCard.classList.replace('playerNotSel', 'playerSel');
@@ -321,9 +345,9 @@ function renderCardSel(event) {
     }
     selCard.classList.replace('playerNotSel', 'playerSel');
     selCard.classList.add("firstCardSel");
-    gameStatus.textContent = `${selCard.textContent} + ? = 10`
+    gameStatus.textContent = `${selCard.textContent} + ? = 10`;
     return;
-};
+}
 
 function renderCardStatus (firstCard, secCard) {
     let card1 = document.getElementById(firstCard.getCardLabel());
@@ -335,8 +359,20 @@ function renderCardStatus (firstCard, secCard) {
     card2.classList.replace('active', secCard.getCardStatus());
     card1.classList.replace('playerSel', firstCard.getCardSelection());
     card2.classList.replace('playerSel', secCard.getCardSelection());
-    gameStatus.textContent = '? + ? = 10';
+
+    console.log(card1, card2);
+    
     card1.classList.remove('firstCardSel'); //because firstCard in my function arguement is always defined as gameState.firstCardSel
+    if (card1.classList.contains('active')) {
+        gameStatus.textContent = "That didn't quite add up. Try again!";
+        console.log('bingo1');
+        setTimeout(newMessage(), 6000);
+    }
+        {
+        gameStatus.textContent = "Bingo! That summed up nicely to 10!";
+        console.log('bingo2');
+        setTimeout(newMessage(), 6000);    
+    };
 }
 
 // Reference: Fisher-Yates shuffle algorithm
@@ -344,5 +380,7 @@ function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]]; // Swap elements at i and j
-  }
+  };
 }
+
+// put the numbers here then insert into DOM later; have a score
