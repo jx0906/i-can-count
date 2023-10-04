@@ -132,10 +132,11 @@ function initialize() {
     
         if (gameState.timeLeft <= 0) {
             timerDisplay.textContent = "TIME'S UP!";
+            checkWin();
             clearInterval(timer);
           }
         return;
-      }, 500); // use setInterval to call the updateCountdown function every second (60000 = 60 s; 1000 milliseconds = 1s).  
+      }, 1000); // use setInterval to call the updateCountdown function every second (60000 = 60 s; 1000 milliseconds = 1s).  
 }
 
 // store timer as a global variable
@@ -253,20 +254,15 @@ function updateGame() {
     clearInterval(timer);
     gameState.timeLeft = 60;
     if (gameState.level === game2.getGameLevel()) {
-        // console.log('test1a');
         gameState.level = game3.getGameLevel();
         gameState.cardsLeft = game3.getTotalGameCards();
         createCards(game3.getTotalGameCards());
-        // console.log('test1b');
-        }
+    }
     if (gameState.level === game1.getGameLevel()) {
-        // console.log('test2a');
         gameState.level = game2.getGameLevel();
         gameState.cardsLeft = game2.getTotalGameCards();
         createCards(game2.getTotalGameCards());
-        // console.log('test2b');
-    }    
-    console.log('test3');
+    } 
     renderStartGame();
     timer = setInterval(function () {
         const seconds = gameState.timeLeft % 60; 
@@ -278,7 +274,7 @@ function updateGame() {
     
         if (gameState.timeLeft <= 0) {
             timerDisplay.textContent = "TIME'S UP!";
-//            checkWin();
+            checkWin();
             clearInterval(timer);
           }
       }, 1000);
