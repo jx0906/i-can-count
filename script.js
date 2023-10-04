@@ -314,13 +314,13 @@ function renderMessage() {
 
     if (gameState.timeLeft <= 0 || gameState.cardsLeft > 0) {
         updatedInstructions.innerHTML = `Good attempt! You scored ${gameState.score}! Shall we try again?<br><br>`;
-        nGame.textContent = "Ok, let's go!";
+        nGame.textContent = "Ok, I can do this!";
         return;
     }
     if (gameState.timeLeft >= 0 && gameState.cardsLeft == 0) {
         if (gameState.level == game1.getGameLevel() || gameState.level == game2.getGameLevel()) {
         updatedInstructions.innerHTML = `That was awesome! You scored ${gameState.score}! Shall we move on to the next challenge?`;
-        nGame.textContent = "Ok! Challenge Accepted!";      
+        nGame.textContent = "Ok, let's go!";      
         return;
         }
         updatedInstructions.innerHTML = `You did an amazing job with a total score of ${gameState.score}! Would you like to play again?`;
