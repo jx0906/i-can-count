@@ -1,12 +1,21 @@
 1. **Analyze the app's functionality**: The app's features, from the user's point of view, should be described using _User Stories_.
 
+As a user,
+- I want to be able to apply arithmetic to play the game (ie, be able to mark out X and O on a 9-grid box).
+- I would like feedback on my choices, ie, when I win and make a mistake.
+- I want to be able to track my progress in the game (ie, amount of time left, which level)
+
 2. **Think about the overall design (look & feel) of the app**
+
+- game is targeted for children below 5 yo, so bright colours and images would be preferred
+- but considering that this is a project, i will prioritise the business logic.
+- will go for minimalist design, get the game working
 
 3. **Wireframe the UI** - no need
 
     Wireframes provide a blueprint for the HTML & CSS. Wireframes also help reveal an application's state (data) and functionality.
 
-4. **Pseudocode**
+4. **Pseudocode** - see pseudocode.txt
 
    Pseudocode outlines the app's logic using plain language. It provides a road map to writing the code itself. For example,
    pseudocoding the logic for when a player makes a move, checking if the game has been won, etc., will prove to be helpful when
@@ -47,7 +56,6 @@ things i will need to code:
 /if time permits:
 - let users decide what is that number they want for the summation; or maybe multiplication? 
 - have animation to show dinosaur catching up with the prey (as a proxy for timer)
-- keeping score (eg, add timerBal points for proceeding to next level. )
 - keeping a scoreboard of players' history
 
 info I need to "preload" into the code:
