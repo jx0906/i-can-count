@@ -98,6 +98,7 @@ const timerDisplay = document.getElementById('timer-display');
 const gameStatus = document.getElementById('game-status');
 const gameCards = document.getElementById('game-cards');
 const nextGame = document.getElementById('next-game');
+const startInstructions = document.getElementById('instructions');
 const updatedInstructions = document.getElementById('updated-instructions');
 const nGame = document.getElementById('ngame-button');
 
@@ -217,7 +218,6 @@ function checkSum (firstCard, secCard) {
         gameState.cardsLeft = updatedCardArray.length;
         // console.log(updatedCardArray);
         renderCardStatus (firstCard, secCard);
-        checkWin();
         return;
     }
     firstCard.setCardSelection("playerNotSel");
@@ -233,21 +233,18 @@ function checkWin() {
         console.log(gameState.score);
         console.log(gameState.level);
         gameState.score += parseInt(gameState.timeLeft);
-        clearInterval(timer);
         renderMessage();
-        return;
-    }
-    // gameState.timeLeft > 0 && gameState.cardsLeft > 0) 
-    return;
-    }
+    };
+    return; // gameState.timeLeft > 0 && gameState.cardsLeft > 0) 
+}
 
 function nextSteps() {
-    if (gameState.timeLeft >= 0 && gameState.cardsLeft == 0 && (gameState.level == game1.getGameLevel() || gameState.level == game2.getGameLevel())) {
+    if (gameState.timeLeft >= 0 && gameState.cardsLeft == 0 && (gameState.level === game1.getGameLevel() || gameState.level === game2.getGameLevel())) {
         updateGame();
         return;
         }
     else { //gameState.level == game3.getGameLevel() || lost the game
-        initialize();
+        reinitialize();
         };
     }
 
@@ -256,17 +253,20 @@ function updateGame() {
     clearInterval(timer);
     gameState.timeLeft = 60;
     if (gameState.level === game2.getGameLevel()) {
+        // console.log('test1a');
         gameState.level = game3.getGameLevel();
         gameState.cardsLeft = game3.getTotalGameCards();
         createCards(game3.getTotalGameCards());
-        return;
+        // console.log('test1b');
         }
     if (gameState.level === game1.getGameLevel()) {
+        // console.log('test2a');
         gameState.level = game2.getGameLevel();
         gameState.cardsLeft = game2.getTotalGameCards();
         createCards(game2.getTotalGameCards());
-        return;
-    };
+        // console.log('test2b');
+    }    
+    console.log('test3');
     renderStartGame();
     timer = setInterval(function () {
         const seconds = gameState.timeLeft % 60; 
@@ -287,13 +287,14 @@ function updateGame() {
 //for game replay only
 
 function reinitialize() {
-    document.getElementById('instructions').style.display = "block";
+    startInstructions.style.display = "block";
     document.getElementById('game-state').style.display = "none";
+    nextGame.style.display = "none";
 }
 
 // for game start and game refresh (ie, new level)
 function renderStartGame() {
-    document.getElementById('instructions').style.display = "none";
+    startInstructions.style.display = "none";
     nextGame.style.display = "none";
     // document.querySelectorAll('.next-game').forEach(a=>a.style.display = "none");
     document.getElementById('game-state').style.display = "flex";
@@ -309,11 +310,8 @@ function newMessage() {
 };
 
 function renderMessage() {
-    gameStatus.textContent = '';
-    timerDisplay.style.display = "none";
-    scoreDisplay.style.display = "none";
-    document.getElementById('instructions').style.display = "none";
-    replayButton.style.display = "none";
+    document.getElementById('game-state').style.display = "none";
+    startInstructions.style.display = "none";
     nextGame.style.display = "flex";
     
     // document.querySelectorAll('.next-game').forEach(a=>a.style.display = "block"); - for DOM action on class elements
