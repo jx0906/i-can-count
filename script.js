@@ -75,11 +75,14 @@ class card {
 
 let timer;
 
+let gameSel;
+
 let cardArray = [];
 
 //always try to set smth for the keys in the object
 let gameState = {
     level: null,
+    score: 0,
     firstCardSel: null,
     timeLeft: 60,
     cardsLeft: 0
@@ -89,15 +92,19 @@ let gameState = {
 // by avoiding repeated DOM queries. When you cache an element, you are essentially setting it as a variable.
 
 const playButton = document.getElementById('play-button');
+const replayButton = document.getElementById('replay-button');
+const scoreDisplay = document.getElementById('score-display');
 const timerDisplay = document.getElementById('timer-display');
 const gameStatus = document.getElementById('game-status');
 const gameCards = document.getElementById('game-cards');
+const nextGame = document.getElementById('next-game');
 const updatedInstructions = document.getElementById('updated-instructions');
 const nGame = document.getElementById('ngame-button');
 
 // event listeners
 
 playButton.addEventListener('click', initialize);
+replayButton.addEventListener('click', reinitialize);
 gameCards.addEventListener('click', handleMove);
 nGame.addEventListener('click', nextSteps);
 
@@ -109,6 +116,7 @@ function initialize() {
     // when people click on replay when the timer is still running midway - we want to make sure its reset to run properly (instead of counting
     // down in (eg) double/triple quicktime) 
     gameState.timeLeft = 60;
+    gameState.score = 0;
     gameState.level = game1.getGameLevel();
     gameState.cardsLeft = game1.getTotalGameCards();
     createCards(game1.getTotalGameCards());
@@ -123,7 +131,6 @@ function initialize() {
     
         if (gameState.timeLeft <= 0) {
             timerDisplay.textContent = "TIME'S UP!";
-            checkWin();
             clearInterval(timer);
           }
         return;
@@ -190,16 +197,17 @@ function handleMove(evt) {
     //gameState.firstCardSel === null
     clickedCard.setCardSelection("playerSel");    
     gameState.firstCardSel = clickedCard;
-    console.log(gameState.firstCardSel);
+    // console.log(gameState.firstCardSel);
     renderCardSel(evt);
     return;
     }
 
 function checkSum (firstCard, secCard) {
     if (firstCard.getCardValue() + secCard.getCardValue() === 10) {
+        gameState.score +=10;
         firstCard.setCardProfile("inactive", "playerNotSel");
         secCard.setCardProfile("inactive", "playerNotSel");
-        console.log(firstCard,secCard);
+        // console.log(firstCard,secCard);
         // console.log(cardArray);
         
         let updatedCardArray = cardArray.filter(dropCard);
@@ -207,7 +215,7 @@ function checkSum (firstCard, secCard) {
              return card.getCardStatus() == 'active';
             }
         gameState.cardsLeft = updatedCardArray.length;
-        console.log(updatedCardArray);
+        // console.log(updatedCardArray);
         renderCardStatus (firstCard, secCard);
         checkWin();
         return;
@@ -219,7 +227,13 @@ function checkSum (firstCard, secCard) {
 }
 
 function checkWin() {
+    clearInterval(gameSel);
     if ((gameState.timeLeft >= 0 && gameState.cardsLeft == 0) || (gameState.timeLeft <= 0 && gameState.cardsLeft > 0)) {
+        console.log(gameState.timeLeft);
+        console.log(gameState.score);
+        console.log(gameState.level);
+        gameState.score += parseInt(gameState.timeLeft);
+        clearInterval(timer);
         renderMessage();
         return;
     }
@@ -227,39 +241,32 @@ function checkWin() {
     return;
     }
 
-function newMessage() {
-        gameStatus.textContent = '? + ? = 10'
-    };
-
 function nextSteps() {
-    if (gameState.timeLeft >= 0 && gameState.cardsLeft == 0) {
-        if (gameState.level == game1.getGameLevel() || gameState.level == game2.getGameLevel()) {
+    if (gameState.timeLeft >= 0 && gameState.cardsLeft == 0 && (gameState.level == game1.getGameLevel() || gameState.level == game2.getGameLevel())) {
         updateGame();
         return;
         }
-        //gameState.level == game3.getGameLevel()
+    else { //gameState.level == game3.getGameLevel() || lost the game
         initialize();
-};
-    //gameState.timeLeft <= 0, gameState.cardsLeft !=0
-    initialize();
-}
+        };
+    }
 
 function updateGame() {
     cardArray = [];
     clearInterval(timer);
     gameState.timeLeft = 60;
-    if (gameState.level == game1.getGameLevel()) {
+    if (gameState.level === game2.getGameLevel()) {
+        gameState.level = game3.getGameLevel();
+        gameState.cardsLeft = game3.getTotalGameCards();
+        createCards(game3.getTotalGameCards());
+        return;
+        }
+    if (gameState.level === game1.getGameLevel()) {
         gameState.level = game2.getGameLevel();
         gameState.cardsLeft = game2.getTotalGameCards();
         createCards(game2.getTotalGameCards());
         return;
     };
-    if (gameState.level == game2.getGameLevel()) {
-    gameState.level = game3.getGameLevel();
-    gameState.cardsLeft = game3.getTotalGameCards();
-    createCards(game3.getTotalGameCards());
-    return;
-    }
     renderStartGame();
     timer = setInterval(function () {
         const seconds = gameState.timeLeft % 60; 
@@ -271,43 +278,58 @@ function updateGame() {
     
         if (gameState.timeLeft <= 0) {
             timerDisplay.textContent = "TIME'S UP!";
-            checkWin();
+//            checkWin();
             clearInterval(timer);
           }
-        return;
-      }, 500);
+      }, 1000);
 }
 
+//for game replay only
+
+function reinitialize() {
+    document.getElementById('instructions').style.display = "block";
+    document.getElementById('game-state').style.display = "none";
+}
 
 // for game start and game refresh (ie, new level)
 function renderStartGame() {
-    document.getElementById('instructions').style.display = "block";
-    playButton.textContent = "Replay!"
-    document.querySelectorAll('.next-game').forEach(a=>a.style.display = "none");
-    timerDisplay.style.display = "block";
-    renderCreateCards();
+    document.getElementById('instructions').style.display = "none";
+    nextGame.style.display = "none";
+    // document.querySelectorAll('.next-game').forEach(a=>a.style.display = "none");
+    document.getElementById('game-state').style.display = "flex";
+    scoreDisplay.textContent = `Current Score: ${gameState.score}`;
     gameStatus.textContent = 'Your time starts now!'
-    setTimeout(newMessage, 1000); // setTimeout (not setInterval) cos you only want it to run once 
+    replayButton.style.display = "block";
+    renderCreateCards();
+    gameSel = setTimeout(newMessage, 1000); // setTimeout (not setInterval) cos you only want it to run once
 }
+
+function newMessage() {
+    gameStatus.textContent = '? + ? = 10';
+};
 
 function renderMessage() {
     gameStatus.textContent = '';
     timerDisplay.style.display = "none";
+    scoreDisplay.style.display = "none";
     document.getElementById('instructions').style.display = "none";
-    document.querySelectorAll('.next-game').forEach(a=>a.style.display = "block");
+    replayButton.style.display = "none";
+    nextGame.style.display = "flex";
+    
+    // document.querySelectorAll('.next-game').forEach(a=>a.style.display = "block"); - for DOM action on class elements
 
-    if (gameState.timeLeft <= 0 && gameState.cardsLeft > 0) {
-        updatedInstructions.innerHTML = 'Good attempt! Shall we try again?<br><br>';
+    if (gameState.timeLeft <= 0 || gameState.cardsLeft > 0) {
+        updatedInstructions.innerHTML = `Good attempt! You scored ${gameState.score}! Shall we try again?<br><br>`;
         nGame.textContent = "Ok, let's go!";
         return;
     }
     if (gameState.timeLeft >= 0 && gameState.cardsLeft == 0) {
         if (gameState.level == game1.getGameLevel() || gameState.level == game2.getGameLevel()) {
-        updatedInstructions.innerHTML = 'That was awesome! Shall we move on to the next challenge?';
+        updatedInstructions.innerHTML = `That was awesome! You scored ${gameState.score}! Shall we move on to the next challenge?`;
         nGame.textContent = "Ok! Challenge Accepted!";      
         return;
         }
-        updatedInstructions.innerHTML = 'You did an amazing job! Would you like to play again?';
+        updatedInstructions.innerHTML = `You did an amazing job with a total score of ${gameState.score}! Would you like to play again?`;
         nGame.textContent = "Ok, let's do this again!";
         return;
     }
@@ -366,18 +388,19 @@ function renderCardStatus (firstCard, secCard) {
     card1.classList.replace('playerSel', firstCard.getCardSelection());
     card2.classList.replace('playerSel', secCard.getCardSelection());
 
-    console.log(card1, card2);
+    // console.log(card1, card2);
     
     card1.classList.remove('firstCardSel'); //because firstCard in my function arguement is always defined as gameState.firstCardSel
     if (card1.classList.contains('active')) {
         gameStatus.textContent = "That didn't quite add up. Try again!";
         console.log('bingo1');
-        setTimeout(newMessage(), 6000);
+        gameSel = setTimeout(newMessage, 1500);
     }
-        {
+    else {
         gameStatus.textContent = "Bingo! That summed up nicely to 10!";
+        scoreDisplay.textContent = `Current Score: ${gameState.score}`;
         console.log('bingo2');
-        setTimeout(newMessage(), 6000);    
+        gameSel = setTimeout(newMessage, 1500);    
     };
 }
 

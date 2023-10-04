@@ -25,14 +25,17 @@ body {
   color: white;
 }
 
-.next-game {
+#next-game {
   display: none;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 
 #updated-instructions{
   background-color: transparent;
   background-blend-mode: overlay;
-  /* border-style: double; */
   font-size: 20px;
 }
 
@@ -49,7 +52,7 @@ border-radius: 4px;
 }
 
 #game-state {
-  display: flex;
+  display: none;
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: center;
@@ -58,6 +61,16 @@ border-radius: 4px;
 
 #timer-display {
   background-clip: border-box;
+  display: block;
+}
+
+#replay-button {
+  margin-top: 10px;
+}
+
+#replay-button:hover {
+  background-color: black;
+  color: white;
 }
 
 #game-cards {
