@@ -5,7 +5,7 @@ _Technologies Used: JavaScript, HTML, CSS_
 
 ## Gameplay
 
-**Instructions**
+**Instructions**<br>
 Given a deck of cards, choose two cards that add up to 10. Game will continue until the cards are cleared or when time's up (1 min for each game play), whichever is earlier. There are a total of three levels, with varying number of game cards. Players can earn bonus points and advance to the next level if they clear the cards before time's up.
 
 **Screenshots of Game**
