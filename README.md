@@ -32,9 +32,9 @@ _(D) Round-up of game play with score and motivational message_
 [Link to Game](https://jx0906.github.io/)
 
 ## Planned future enhancements
-a. Shuffle number cards
-b. Add distraction cards 
-c. Allow customisation of summation figure
-d. ALlow customisation of arithmetric operation - summation, minus, multiplication, division
-d. Have animation to show dinosaur catching up with the prey (as a proxy for timer)
-e. keeping a scoreboard of players' history
+a. Shuffle number cards<br>
+b. Add distraction cards<br> 
+c. Allow customisation of summation figure<br>
+d. ALlow customisation of arithmetric operation - summation, minus, multiplication, division<br>
+d. Have animation to show dinosaur catching up with the prey (as a proxy for timer)<br>
+e. keeping a scoreboard of players' history<br>
