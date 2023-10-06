@@ -14,11 +14,11 @@ Given a deck of cards, choose two cards that add up to 10, or a predetermined nu
 _Welcome screen_
 <img width="949" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/27d3084d-645a-4638-9d87-a31f06dce99a">
 
-_Start Game_
-<img width="935" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/ac6b08d7-3c75-47dd-8a4d-f13769d5b3a4">
-
 _Option to customise summation goal_
 <img width="916" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/07330f83-bc5c-4922-a5d3-9d99ccb49a2c">
+
+_Start Game_
+<img width="935" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/ac6b08d7-3c75-47dd-8a4d-f13769d5b3a4">
 
 _Informative prompts to guide game play throughout_
 _(A) Card selection_
