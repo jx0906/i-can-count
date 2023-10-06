@@ -97,6 +97,7 @@ nGame.addEventListener('click', nextSteps);
 replayButton.addEventListener('click', reinitialize);
 
 function customize() {
+    document.getElementById('input-feedback').textContent = "";
     clearInterval(timer);
     startInstructions.style.display = "none";
     let summationInput = document.getElementById('summation-input');
@@ -104,7 +105,6 @@ function customize() {
 
     document.getElementById('yes-button').addEventListener("click", function() {
         if (document.getElementById('summation-target').checkValidity()) {
-            document.getElementById('input-feedback').textContent = "";
             gameState.sumGoal = parseInt(document.querySelector('#summation-target').value);        
             summationInput.style.display = "none";
             initialize();
