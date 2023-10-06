@@ -20,7 +20,6 @@ _Option to customise summation goal_
 _Start Game_
 <img width="946" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/643b5298-50e8-4e61-b8b7-512a3a4b56d4">
 
-
 _Informative prompts to guide game play throughout_
 
 _(A) Card selection_
