@@ -102,8 +102,6 @@ gameCards.addEventListener('click', handleMove);
 nGame.addEventListener('click', nextSteps);
 replayButton.addEventListener('click', reinitialize);
 
-// functions
-
 function customize() {
     clearInterval(timer);
     startInstructions.style.display = "none";
@@ -114,8 +112,8 @@ function customize() {
         if (summationInput.checkValidity()) {
             gameState.sumGoal = parseInt(document.querySelector('#summation-target').value);        
             summationInput.style.display = "none";
-            document.getElementById("form").reset();
             initialize();
+            document.getElementById("form").reset();
         } else {
         document.getElementById('input-feedback').textContent = "Please enter a valid number from 2 to 100. Leave blank if you prefer to use the default summation value of 10.";
     };});
@@ -137,7 +135,6 @@ function initialize() {
     gameState.score = 0;
     gameState.level = game1.getGameLevel();
     gameState.cardsLeft = game1.getTotalGameCards();
-    console.log(gameState.sumGoal);
     createCards(game1.getTotalGameCards());
     renderStartGame();
     timer = setInterval(function () {
@@ -248,9 +245,9 @@ function checkSum (firstCard, secCard) {
 function checkWin() {
     clearInterval(gameSel);
     if ((gameState.timeLeft >= 0 && gameState.cardsLeft == 0) || (gameState.timeLeft <= 0 && gameState.cardsLeft > 0)) {
-        console.log(gameState.timeLeft);
-        console.log(gameState.score);
-        console.log(gameState.level);
+        // console.log(gameState.timeLeft);
+        // console.log(gameState.score);
+        // console.log(gameState.level);
         gameState.score += parseInt(gameState.timeLeft);
         renderMessage();
     };
@@ -416,13 +413,11 @@ function renderCardStatus (firstCard, secCard) {
     card1.classList.remove('firstCardSel'); //because firstCard in my function arguement is always defined as gameState.firstCardSel
     if (card1.classList.contains('active')) {
         gameStatus.textContent = `That didn't quite add up to ${gameState.sumGoal}. Try again!`;
-        console.log('bingo1');
         gameSel = setTimeout(newMessage, 1500);
     }
     else {
         gameStatus.textContent = `Bingo! That summed up nicely to ${gameState.sumGoal}!`;
         scoreDisplay.textContent = `Current Score: ${gameState.score}`;
-        console.log('bingo2');
         gameSel = setTimeout(newMessage, 1500);    
     };
 }
