@@ -11,15 +11,15 @@ body {
   align-items: center;
   gap: 5px;
   background: url("background.jpg") no-repeat center;
-  background-size: cover;
+  background-size: 150%;
 }
 
 #instructions {
   background-color: transparent;
   background-blend-mode: overlay;
   border-style: double;
-  width: 350px;
-  height: 280px;
+  width: 600px;
+  height: 250px;
   text-align: center;
 }
 
@@ -28,6 +28,31 @@ body {
 }
 
 #play-button:hover {
+  background-color: black;
+  color: white;
+}
+
+#summation-input {
+  display: none;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+#yes-button, #no-button {
+  text-align: center;
+  font-size: 16px;
+  margin: 10px;
+  border-radius: 1px;
+}
+
+#yes-button:hover {
+  background-color: black;
+  color: white;
+}
+
+#no-button:hover {
   background-color: black;
   color: white;
 }

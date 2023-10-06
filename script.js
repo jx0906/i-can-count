@@ -19,15 +19,6 @@ var game1 = new game(1, 6);
 var game2 = new game(2, 10);
 var game3 = new game(3, 20);
 
-//based on cardValue
-const cardCombi = [
-    [1,9],
-    [2,8],
-    [3,7],
-    [4,6],
-    [5,5]
-]
-
 class card {
     constructor(value, status, selection) {
     this.value = value;
@@ -85,7 +76,8 @@ let gameState = {
     score: 0,
     firstCardSel: null,
     timeLeft: 60,
-    cardsLeft: 0
+    cardsLeft: 0,
+    sumGoal: 0
 }
 
 // cached elements - This term emphasizes the idea of storing a reference to a DOM element in a variable to improve performance 
@@ -102,24 +94,49 @@ const startInstructions = document.getElementById('instructions');
 const updatedInstructions = document.getElementById('updated-instructions');
 const nGame = document.getElementById('ngame-button');
 
+
 // event listeners
 
-playButton.addEventListener('click', initialize);
-replayButton.addEventListener('click', reinitialize);
+playButton.addEventListener('click', customize);
+// playButton.addEventListener('click', initialize);
 gameCards.addEventListener('click', handleMove);
 nGame.addEventListener('click', nextSteps);
+replayButton.addEventListener('click', reinitialize);
 
 // functions
+
+function customize() {
+    clearInterval(timer);
+    startInstructions.style.display = "none";
+    let summationInput = document.getElementById('summation-input');
+    summationInput.style.display = "flex";
+
+    let summationTarget = document.getElementById('yes-button');
+    let summationTargetDefault = document.getElementById('no-button');
+
+    summationTarget.addEventListener("click", function() {
+        gameState.sumGoal = parseInt(document.querySelector('#summation-target').value);
+        summationInput.style.display = "none";
+        initialize();
+    });
+
+    summationTargetDefault.addEventListener('click', function() {
+        gameState.sumGoal = 10;
+        summationInput.style.display="none";
+        initialize();
+    });
+}
 
 function initialize() {
     cardArray = [];
     clearInterval(timer); // it's ok to have this at the start of the game here even though timer is undefined; this is insurance for cases
     // when people click on replay when the timer is still running midway - we want to make sure its reset to run properly (instead of counting
-    // down in (eg) double/triple quicktime) 
+    // down in (eg) double/triple quicktime)
     gameState.timeLeft = 60;
     gameState.score = 0;
     gameState.level = game1.getGameLevel();
     gameState.cardsLeft = game1.getTotalGameCards();
+    console.log(gameState.sumGoal);
     createCards(game1.getTotalGameCards());
     renderStartGame();
     timer = setInterval(function () {
@@ -148,22 +165,22 @@ function createCards(totalCardsToCreate) {
     // }
 
     for (i = 0; i < (totalCardsToCreate/2); i++) {
-        // get a random item from an array
-        // get random index value
-        const randomIndex = Math.floor(Math.random() * cardCombi.length);
-        let combiToCreate = cardCombi[randomIndex];
-        // console.log(combiToCreate); for debugging, to confirm what we are getting is a set of numbers
-        let cardA = new card(combiToCreate[0], "active", "playerNotSel");
-        let cardB = new card(combiToCreate[1], "active", "playerNotSel");
+        let randomValue = Math.floor(Math.random() * gameState.sumGoal);
+        // Math.random() generates a random floating-point number between 0 (inclusive) and 1 (exclusive)
+        // Multiplying Math.random() by max scales this random number to the range [0, max).
+        // Math.floor() rounds down the result to the nearest integer, ensuring the result is an integer between 0 (inclusive) and max - 1 (inclusive).
+        let combiValue = gameState.sumGoal - randomValue; 
+        let cardA = new card(randomValue, "active", "playerNotSel");
+        let cardB = new card(combiValue, "active", "playerNotSel");
         cardArray.push(cardA, cardB); //doesn't replace, just appends, so command would work in this loop and not reset cardArray each loop
     }
+
         // console.log(cardArray); for debugging to confirm cardArray is rightly established
     for (j = 0; j < cardArray.length; j++) {
         cardArray[j].setCardLabel("card " + j); //want to do this so i can assign the created DOM element with the same label to facilitate
         // subsequent needs to check on the card class properties (eg, getClassSelection())
-    };
+    };}
     // console.log(cardArray[1]); for debugging to confirm the cardLabel is rightly assigned
-    }
 
 // rmb to write codes to update Model, not DOM (that's render)
 function handleMove(evt) {
@@ -205,7 +222,7 @@ function handleMove(evt) {
     }
 
 function checkSum (firstCard, secCard) {
-    if (firstCard.getCardValue() + secCard.getCardValue() === 10) {
+    if (firstCard.getCardValue() + secCard.getCardValue() === gameState.sumGoal) {
         gameState.score +=10;
         firstCard.setCardProfile("inactive", "playerNotSel");
         secCard.setCardProfile("inactive", "playerNotSel");
@@ -302,15 +319,13 @@ function renderStartGame() {
 }
 
 function newMessage() {
-    gameStatus.textContent = '? + ? = 10';
+    gameStatus.textContent = `? + ? = ${gameState.sumGoal}`;
 };
 
 function renderMessage() {
     document.getElementById('game-state').style.display = "none";
     startInstructions.style.display = "none";
     nextGame.style.display = "flex";
-    
-    // document.querySelectorAll('.next-game').forEach(a=>a.style.display = "block"); - for DOM action on class elements
 
     if (gameState.timeLeft <= 0 || gameState.cardsLeft > 0) {
         updatedInstructions.innerHTML = `Good attempt! You scored ${gameState.score}! Shall we try again?<br><br>`;
@@ -328,9 +343,6 @@ function renderMessage() {
         return;
     }
 }
-
-//click(Callback) - if state is x, initialise(), else....
-// remove eventlistener before i add
 
 function renderCreateCards() {
     while (gameCards.hasChildNodes()) {
@@ -358,16 +370,15 @@ function renderCardSel(event) {
         selCard.classList.replace('playerSel', 'playerNotSel');
         selCard.classList.remove('firstCardSel');
         newMessage();
-        // gameStatus.textContent = '? + ? = 10'
         return;
     }
     selCard.classList.replace('playerNotSel', 'playerSel');
-    gameStatus.textContent = `${firstCard.textContent} + ${selCard.textContent} = 10`;
+    gameStatus.textContent = `${firstCard.textContent} + ${selCard.textContent} = ${gameState.sumGoal}`;
     return;
     }
     selCard.classList.replace('playerNotSel', 'playerSel');
     selCard.classList.add("firstCardSel");
-    gameStatus.textContent = `${selCard.textContent} + ? = 10`;
+    gameStatus.textContent = `${selCard.textContent} + ? = ${gameState.sumGoal}`;
     return;
 }
 
@@ -376,7 +387,7 @@ function renderCardStatus (firstCard, secCard) {
     let card2 = document.getElementById(secCard.getCardLabel());
 
     //for checkSum, the two selected cards would already be "active" and "playerSel" so we just replace with whatever status and selection
-    // info was assigned in the Model (after the win eligibility checks, ie = 10)
+    // info was assigned in the Model (after the win eligibility checks, ie = gameState.sumGoal)
     card1.classList.replace('active', firstCard.getCardStatus());
     card2.classList.replace('active', secCard.getCardStatus());
     card1.classList.replace('playerSel', firstCard.getCardSelection());
@@ -386,12 +397,12 @@ function renderCardStatus (firstCard, secCard) {
     
     card1.classList.remove('firstCardSel'); //because firstCard in my function arguement is always defined as gameState.firstCardSel
     if (card1.classList.contains('active')) {
-        gameStatus.textContent = "That didn't quite add up. Try again!";
+        gameStatus.textContent = `That didn't quite add up to ${gameState.sumGoal}. Try again!`;
         console.log('bingo1');
         gameSel = setTimeout(newMessage, 1500);
     }
     else {
-        gameStatus.textContent = "Bingo! That summed up nicely to 10!";
+        gameStatus.textContent = `Bingo! That summed up nicely to ${gameState.sumGoal}!`;
         scoreDisplay.textContent = `Current Score: ${gameState.score}`;
         console.log('bingo2');
         gameSel = setTimeout(newMessage, 1500);    
@@ -405,5 +416,3 @@ function shuffleArray(array) {
     [array[i], array[j]] = [array[j], array[i]]; // Swap elements at i and j
   };
 }
-
-// put the numbers here then insert into DOM later; have a score
