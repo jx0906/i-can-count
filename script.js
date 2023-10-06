@@ -57,8 +57,8 @@ class card {
     setCardProfile(newStatus, newSel) {
         this.status = newStatus;
         this.selection = newSel;
-    }
-
+    };
+}
 // state variables
 
 let timer;
