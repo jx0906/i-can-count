@@ -148,7 +148,6 @@ function initialize() {
       }, 1000); 
 }
 
-
 function createCards(totalCardsToCreate) {
     for (i = 0; i < (totalCardsToCreate/2); i++) {
         let randomValue = Math.floor(Math.random() * gameState.sumGoal);
