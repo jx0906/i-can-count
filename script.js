@@ -110,18 +110,20 @@ function customize() {
     let summationInput = document.getElementById('summation-input');
     summationInput.style.display = "flex";
 
-    let summationTarget = document.getElementById('yes-button');
-    let summationTargetDefault = document.getElementById('no-button');
+    document.getElementById('yes-button').addEventListener("click", function() {
+        if (summationInput.checkValidity()) {
+            gameState.sumGoal = parseInt(document.querySelector('#summation-target').value);        
+            summationInput.style.display = "none";
+            document.getElementById("form").reset();
+            initialize();
+        } else {
+        document.getElementById('input-feedback').textContent = "Please enter a valid number from 2 to 100. Leave blank if you prefer to use the default summation value of 10.";
+    };});
 
-    summationTarget.addEventListener("click", function() {
-        gameState.sumGoal = parseInt(document.querySelector('#summation-target').value);
-        summationInput.style.display = "none";
-        initialize();
-    });
-
-    summationTargetDefault.addEventListener('click', function() {
+    document.getElementById('no-button').addEventListener('click', function() {
         gameState.sumGoal = 10;
         summationInput.style.display="none";
+        document.getElementById("form").reset();
         initialize();
     });
 }

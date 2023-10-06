@@ -42,6 +42,7 @@ _(D) Round-up of game play with score and motivational message_
 
 ## Planned future enhancements
 a. Add distraction cards<br> 
-b. ALlow customisation of arithmetric operation - summation, minus, multiplication, division<br>
+b. Allow customisation of arithmetric operation - summation, minus, multiplication, division<br>
 c. Have animation to show dinosaur catching up with the prey (as a proxy for timer)<br>
 d. Keeping a scoreboard of players' history<br>
+e. Responsive design for UI
