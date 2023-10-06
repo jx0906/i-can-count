@@ -1,5 +1,4 @@
 // constants
-
 class game {
     constructor(level, totalCards) {
     this.level = level;
@@ -358,6 +357,23 @@ function renderCreateCards() {
         // Append created card to the pile of gameCards so that the css styling can be applied
         gameCards.appendChild(gCard);
     };
+
+    // shuffle card display; convert the NodeList of cards to an array
+    let cardDisplay = Array.from(gameCards.children);
+
+    // ref: Fisher-Yates shuffle algorithm
+    function shuffleArray(cardDisplay) {
+        for (let i = cardDisplay.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [cardDisplay[i], cardDisplay[j]] = [cardDisplay[j], cardDisplay[i]];
+        }
+    }
+
+    // Shuffle the array of cards
+    shuffleArray(cardDisplay);
+
+    // Append the shuffled elements back to the container
+    cardDisplay.forEach(card => gameCards.appendChild(card));
 }
 
 function renderCardSel(event) {
@@ -407,12 +423,4 @@ function renderCardStatus (firstCard, secCard) {
         console.log('bingo2');
         gameSel = setTimeout(newMessage, 1500);    
     };
-}
-
-// Reference: Fisher-Yates shuffle algorithm
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]]; // Swap elements at i and j
-  };
 }
