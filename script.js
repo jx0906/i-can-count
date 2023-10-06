@@ -109,13 +109,15 @@ function customize() {
     summationInput.style.display = "flex";
 
     document.getElementById('yes-button').addEventListener("click", function() {
-        if (summationInput.checkValidity()) {
+        if (document.getElementById('summation-target').checkValidity()) {
+            document.getElementById('input-feedback').textContent = "";
             gameState.sumGoal = parseInt(document.querySelector('#summation-target').value);        
             summationInput.style.display = "none";
             initialize();
             document.getElementById("form").reset();
         } else {
         document.getElementById('input-feedback').textContent = "Please enter a valid number from 2 to 100. Leave blank if you prefer to use the default summation value of 10.";
+        document.getElementById("form").reset();
     };});
 
     document.getElementById('no-button').addEventListener('click', function() {
