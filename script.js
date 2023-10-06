@@ -58,8 +58,6 @@ class card {
         this.status = newStatus;
         this.selection = newSel;
     }
-}
-// class Player - if i want to do scoreboard
 
 // state variables
 
@@ -69,7 +67,6 @@ let gameSel;
 
 let cardArray = [];
 
-//always try to set smth for the keys in the object
 let gameState = {
     level: null,
     score: 0,
@@ -79,8 +76,7 @@ let gameState = {
     sumGoal: 0
 }
 
-// cached elements - This term emphasizes the idea of storing a reference to a DOM element in a variable to improve performance 
-// by avoiding repeated DOM queries. When you cache an element, you are essentially setting it as a variable.
+// cached elements
 
 const playButton = document.getElementById('play-button');
 const replayButton = document.getElementById('replay-button');
@@ -93,11 +89,9 @@ const startInstructions = document.getElementById('instructions');
 const updatedInstructions = document.getElementById('updated-instructions');
 const nGame = document.getElementById('ngame-button');
 
-
 // event listeners
 
 playButton.addEventListener('click', customize);
-// playButton.addEventListener('click', initialize);
 gameCards.addEventListener('click', handleMove);
 nGame.addEventListener('click', nextSteps);
 replayButton.addEventListener('click', reinitialize);
@@ -130,9 +124,7 @@ function customize() {
 
 function initialize() {
     cardArray = [];
-    clearInterval(timer); // it's ok to have this at the start of the game here even though timer is undefined; this is insurance for cases
-    // when people click on replay when the timer is still running midway - we want to make sure its reset to run properly (instead of counting
-    // down in (eg) double/triple quicktime)
+    clearInterval(timer);
     gameState.timeLeft = 60;
     gameState.score = 0;
     gameState.level = game1.getGameLevel();
@@ -142,7 +134,7 @@ function initialize() {
     timer = setInterval(function () {
         const seconds = gameState.timeLeft % 60; 
         if (gameState.timeLeft === 60) {
-            timerDisplay.textContent = "1 minute"; // need to specify this so we don't see "0 s" at the start when gameState.timeLeft = 60 and 60%60  =0  (if left to else stmt alone)
+            timerDisplay.textContent = "1 minute";
         }
         else {timerDisplay.textContent = `${seconds} s`;}
         gameState.timeLeft--;
@@ -153,49 +145,27 @@ function initialize() {
             clearInterval(timer);
           }
         return;
-      }, 1000); // use setInterval to call the updateCountdown function every second (60000 = 60 s; 1000 milliseconds = 1s).  
+      }, 1000); 
 }
 
-// store timer as a global variable
-// elaborate on updateCountdown here instead of setting it as another standalone function
 
 function createCards(totalCardsToCreate) {
-    // while (gameCards.hasChildNodes()) {
-    //     gameCards.removeChild(gameCards.firstChild);
-    // }
-
     for (i = 0; i < (totalCardsToCreate/2); i++) {
         let randomValue = Math.floor(Math.random() * gameState.sumGoal);
-        // Math.random() generates a random floating-point number between 0 (inclusive) and 1 (exclusive)
-        // Multiplying Math.random() by max scales this random number to the range [0, max).
-        // Math.floor() rounds down the result to the nearest integer, ensuring the result is an integer between 0 (inclusive) and max - 1 (inclusive).
         let combiValue = gameState.sumGoal - randomValue; 
         let cardA = new card(randomValue, "active", "playerNotSel");
         let cardB = new card(combiValue, "active", "playerNotSel");
-        cardArray.push(cardA, cardB); //doesn't replace, just appends, so command would work in this loop and not reset cardArray each loop
+        cardArray.push(cardA, cardB);
     }
-
-        // console.log(cardArray); for debugging to confirm cardArray is rightly established
     for (j = 0; j < cardArray.length; j++) {
-        cardArray[j].setCardLabel("card " + j); //want to do this so i can assign the created DOM element with the same label to facilitate
-        // subsequent needs to check on the card class properties (eg, getClassSelection())
+        cardArray[j].setCardLabel("card " + j); 
     };}
-    // console.log(cardArray[1]); for debugging to confirm the cardLabel is rightly assigned
-
-// rmb to write codes to update Model, not DOM (that's render)
+ 
 function handleMove(evt) {
-    // console.log(evt.target); //gives DOM value so we need to call on the its ID to link it back to the cardArraylet clickedCardID = evt.target.id; // returns "card 1"
-    // (based on the way I had created the cards)
-
-    // "id" is a DOM property so you  have to be on the DOM element object to use it.
     let idx = parseInt(evt.target.id.replace('card ', ''));
-    // console.log(idx);
     let clickedCard = cardArray[idx];
-    // console.log(clickedCard); // returns an object
-
     let clickedCardSel = clickedCard.getCardSelection();
-    // console.log(clickedCardSel);
-    // console.log(gameState.firstCardSel);
+
     if (gameState.firstCardSel != null) {
         if (clickedCardSel === "playerSel") {
             clickedCard.setCardSelection("playerNotSel");
@@ -203,20 +173,15 @@ function handleMove(evt) {
             renderCardSel(evt);
             return;
         }
-        //clickedCardSel === "playerNotSel"
         clickedCard.setCardSelection("playerSel");
-        // console.log(clickedCard);
-        // console.log(gameState.firstCardSel);
         renderCardSel(evt);
         checkSum(gameState.firstCardSel, clickedCard);
         gameState.firstCardSel = null;
         checkWin();
         return;
         }
-    //gameState.firstCardSel === null
     clickedCard.setCardSelection("playerSel");    
     gameState.firstCardSel = clickedCard;
-    // console.log(gameState.firstCardSel);
     renderCardSel(evt);
     return;
     }
@@ -226,15 +191,12 @@ function checkSum (firstCard, secCard) {
         gameState.score +=10;
         firstCard.setCardProfile("inactive", "playerNotSel");
         secCard.setCardProfile("inactive", "playerNotSel");
-        // console.log(firstCard,secCard);
-        // console.log(cardArray);
-        
+
         let updatedCardArray = cardArray.filter(dropCard);
         function dropCard(card) {
              return card.getCardStatus() == 'active';
             }
         gameState.cardsLeft = updatedCardArray.length;
-        // console.log(updatedCardArray);
         renderCardStatus (firstCard, secCard);
         return;
     }
@@ -247,13 +209,10 @@ function checkSum (firstCard, secCard) {
 function checkWin() {
     clearInterval(gameSel);
     if ((gameState.timeLeft >= 0 && gameState.cardsLeft == 0) || (gameState.timeLeft <= 0 && gameState.cardsLeft > 0)) {
-        // console.log(gameState.timeLeft);
-        // console.log(gameState.score);
-        // console.log(gameState.level);
         gameState.score += parseInt(gameState.timeLeft);
         renderMessage();
     };
-    return; // gameState.timeLeft > 0 && gameState.cardsLeft > 0) 
+    return;
 }
 
 function nextSteps() {
@@ -261,7 +220,7 @@ function nextSteps() {
         updateGame();
         return;
         }
-    else { //gameState.level == game3.getGameLevel() || lost the game
+    else { 
         reinitialize();
         };
     }
@@ -284,7 +243,7 @@ function updateGame() {
     timer = setInterval(function () {
         const seconds = gameState.timeLeft % 60; 
         if (gameState.timeLeft === 60) {
-            timerDisplay.textContent = "1 minute"; // need to specify this so we don't see "0 s" at the start when gameState.timeLeft = 60 and 60%60  =0  (if left to else stmt alone)
+            timerDisplay.textContent = "1 minute";
         }
         else {timerDisplay.textContent = `${seconds} s`;}
         gameState.timeLeft--;
@@ -297,25 +256,21 @@ function updateGame() {
       }, 1000);
 }
 
-//for game replay only
-
 function reinitialize() {
     startInstructions.style.display = "block";
     document.getElementById('game-state').style.display = "none";
     nextGame.style.display = "none";
 }
 
-// for game start and game refresh (ie, new level)
 function renderStartGame() {
     startInstructions.style.display = "none";
     nextGame.style.display = "none";
-    // document.querySelectorAll('.next-game').forEach(a=>a.style.display = "none");
     document.getElementById('game-state').style.display = "flex";
     scoreDisplay.textContent = `Current Score: ${gameState.score}`;
     gameStatus.textContent = 'Your time starts now!'
     replayButton.style.display = "block";
     renderCreateCards();
-    gameSel = setTimeout(newMessage, 1000); // setTimeout (not setInterval) cos you only want it to run once
+    gameSel = setTimeout(newMessage, 1000);
 }
 
 function newMessage() {
@@ -350,19 +305,15 @@ function renderCreateCards() {
     }
 
     for (let i = 0; i < cardArray.length; i++) {
-        //this will lead to the same effect as having </div><div> in the .game-board HTML elem to facilitate css styling, js functions
         let gCard = document.createElement('div');
         gCard.classList.add("cards", cardArray[i].getCardStatus(), cardArray[i].getCardSelection())
         gCard.setAttribute("id",cardArray[i].getCardLabel());
         gCard.innerText = cardArray[i].getCardValue();
-        // Append created card to the pile of gameCards so that the css styling can be applied
         gameCards.appendChild(gCard);
     };
 
-    // shuffle card display; convert the NodeList of cards to an array
     let cardDisplay = Array.from(gameCards.children);
 
-    // ref: Fisher-Yates shuffle algorithm
     function shuffleArray(cardDisplay) {
         for (let i = cardDisplay.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -370,17 +321,13 @@ function renderCreateCards() {
         }
     }
 
-    // Shuffle the array of cards
     shuffleArray(cardDisplay);
-
-    // Append the shuffled elements back to the container
     cardDisplay.forEach(card => gameCards.appendChild(card));
 }
 
 function renderCardSel(event) {
     let selCard = document.getElementById(event.target.id);
     let firstCard = document.querySelector('.firstCardSel');
-    // console.log(firstCard);
 
     if (firstCard != null) {
         if (selCard.classList.contains('playerSel')) {
@@ -403,16 +350,11 @@ function renderCardStatus (firstCard, secCard) {
     let card1 = document.getElementById(firstCard.getCardLabel());
     let card2 = document.getElementById(secCard.getCardLabel());
 
-    //for checkSum, the two selected cards would already be "active" and "playerSel" so we just replace with whatever status and selection
-    // info was assigned in the Model (after the win eligibility checks, ie = gameState.sumGoal)
     card1.classList.replace('active', firstCard.getCardStatus());
     card2.classList.replace('active', secCard.getCardStatus());
     card1.classList.replace('playerSel', firstCard.getCardSelection());
     card2.classList.replace('playerSel', secCard.getCardSelection());
-
-    // console.log(card1, card2);
-    
-    card1.classList.remove('firstCardSel'); //because firstCard in my function arguement is always defined as gameState.firstCardSel
+    card1.classList.remove('firstCardSel');
     if (card1.classList.contains('active')) {
         gameStatus.textContent = `That didn't quite add up to ${gameState.sumGoal}. Try again!`;
         gameSel = setTimeout(newMessage, 1500);
