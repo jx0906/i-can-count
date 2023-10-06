@@ -22,13 +22,16 @@ _Start Game_
 
 _Informative prompts to guide game play throughout_
 _(A) Card selection_
-<img width="945" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/d54c9daf-4af6-43cc-885f-7b24dd62a699">
+<img width="945" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/3ec013f7-9d57-4b22-ba31-21c9b3ae6b3f">
+
 
 _(B) Successful addition_
-<img width="942" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/74c2f41a-e640-4332-ad96-5de70dc21fb9">
+<img width="942" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/3ea8970a-70ae-4782-a0ac-1fe2e78f8b06">
+
 
 _(C) Incorrect combinations_
-<img width="947" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/b53881ed-6196-427a-a8c1-c2d0d9b2c676">
+<img width="942" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/632e0d6a-396f-405a-af72-4946d3660900">
+
 
 _(D) Round-up of game play with score and motivational message_
 <img width="931" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/c26f942d-aba8-4c24-b63b-82cd051320eb">
@@ -37,8 +40,7 @@ _(D) Round-up of game play with score and motivational message_
 [Link to Game](https://jx0906.github.io/)
 
 ## Planned future enhancements
-a. Shuffle number cards<br>
-b. Add distraction cards<br> 
-c. ALlow customisation of arithmetric operation - summation, minus, multiplication, division<br>
-d. Have animation to show dinosaur catching up with the prey (as a proxy for timer)<br>
-e. keeping a scoreboard of players' history<br>
+a. Add distraction cards<br> 
+b. ALlow customisation of arithmetric operation - summation, minus, multiplication, division<br>
+c. Have animation to show dinosaur catching up with the prey (as a proxy for timer)<br>
+d. Keeping a scoreboard of players' history<br>
