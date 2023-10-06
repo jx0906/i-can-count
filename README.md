@@ -7,7 +7,7 @@ _Technologies Used: JavaScript, HTML, CSS_
 
 **Instructions**
 
-Given a deck of cards, choose two cards that add up to 10. Game will continue until the cards are cleared or when time's up (1 min for each game play), whichever is earlier. There are a total of three levels, with varying number of game cards. Players can earn bonus points and advance to the next level if they clear the cards before time's up.
+Given a deck of cards, choose two cards that add up to 10, or a predetermined number of choice. Game will continue until the cards are cleared or when time's up (1 min for each game play), whichever is earlier. There are a total of three levels, with varying number of game cards (6, 10, 20). Players can earn bonus points and advance to the next level if they clear the cards before time's up.
 
 **Screenshots of Game**
 
@@ -16,6 +16,9 @@ _Welcome screen_
 
 _Start Game_
 <img width="935" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/ac6b08d7-3c75-47dd-8a4d-f13769d5b3a4">
+
+_Option to customise summation goal_
+<img width="916" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/07330f83-bc5c-4922-a5d3-9d99ccb49a2c">
 
 _Informative prompts to guide game play throughout_
 _(A) Card selection_
@@ -36,7 +39,6 @@ _(D) Round-up of game play with score and motivational message_
 ## Planned future enhancements
 a. Shuffle number cards<br>
 b. Add distraction cards<br> 
-c. Allow customisation of summation figure<br>
-d. ALlow customisation of arithmetric operation - summation, minus, multiplication, division<br>
+c. ALlow customisation of arithmetric operation - summation, minus, multiplication, division<br>
 d. Have animation to show dinosaur catching up with the prey (as a proxy for timer)<br>
 e. keeping a scoreboard of players' history<br>
