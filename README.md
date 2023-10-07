@@ -18,21 +18,18 @@ _Option to customise summation goal_
 <img width="916" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/07330f83-bc5c-4922-a5d3-9d99ccb49a2c">
 
 _Start Game_
-<img width="946" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/643b5298-50e8-4e61-b8b7-512a3a4b56d4">
+<img width="942" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/c3fec6f1-ae11-4ae6-b9ab-91ca6cb47ffd">
 
 _Informative prompts to guide game play throughout_
 
 _(A) Card selection_
-<img width="945" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/3ec013f7-9d57-4b22-ba31-21c9b3ae6b3f">
-
+<img width="935" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/bfa34d55-e499-49fb-b906-c1ba2d957323">
 
 _(B) Successful addition_
 <img width="942" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/3ea8970a-70ae-4782-a0ac-1fe2e78f8b06">
 
-
 _(C) Incorrect combinations_
-<img width="942" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/632e0d6a-396f-405a-af72-4946d3660900">
-
+<img width="940" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/fe4a8bf4-6857-45d3-b8b1-770464b99358">
 
 _(D) Round-up of game play with score and motivational message_
 <img width="931" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/c26f942d-aba8-4c24-b63b-82cd051320eb">
