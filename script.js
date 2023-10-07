@@ -14,9 +14,9 @@ class game {
     }
 }
 
-var game1 = new game(1, 6);
-var game2 = new game(2, 10);
-var game3 = new game(3, 20);
+let game1 = new game(1, 6);
+let game2 = new game(2, 10);
+let game3 = new game(3, 20);
 
 class card {
     constructor(value, status, selection) {
@@ -69,6 +69,7 @@ let gameSel;
 
 let cardArray = [];
 
+//always try to set smth for the keys in the object
 let gameState = {
     level: null,
     score: 0,
@@ -78,7 +79,8 @@ let gameState = {
     sumGoal: 0
 }
 
-// cached elements
+// cached elements - - This term emphasizes the idea of storing a reference to a DOM element in a variable to improve performance 
+// by avoiding repeated DOM queries. When you cache an element, you are essentially setting it as a variable.
 
 const playButton = document.getElementById('play-button');
 const replayButton = document.getElementById('replay-button');
@@ -98,15 +100,19 @@ gameCards.addEventListener('click', handleMove);
 nGame.addEventListener('click', nextSteps);
 replayButton.addEventListener('click', reinitialize);
 
+// allow players to input their own summation goals at the start of game
 function customize() {
     clearInterval(timer);
     clearInterval(progress);
+    
+    // to hide instruction display so that the summationGoal input box can be displayed
     startInstructions.style.display = "none";
     let summationInput = document.getElementById('summation-input');
     summationInput.style.display = "flex";
     document.getElementById('input-feedback').textContent = "";
 
     document.getElementById('yes-button').addEventListener("click", function() {
+        //validity check based on criteria listed in HTML element
         if (document.getElementById('summation-target').checkValidity()) {
             document.getElementById('input-feedback').textContent = "";
             gameState.sumGoal = parseInt(document.querySelector('#summation-target').value);        
@@ -126,7 +132,9 @@ function customize() {
     });
 }
 
+// setup the game for play
 function initialize() {
+    // clear all old data so they reset to default. create cards based on user-defined summation target
     cardArray = [];
     clearInterval(timer);
     clearInterval(progress); 
@@ -135,7 +143,10 @@ function initialize() {
     gameState.level = game1.getGameLevel();
     gameState.cardsLeft = game1.getTotalGameCards();
     createCards(game1.getTotalGameCards());
+
     renderStartGame();
+    
+    // start all timer-dependent actions
     move();
     timer = setInterval(function () {
         const seconds = gameState.timeLeft % 60; 
@@ -155,8 +166,10 @@ function initialize() {
       }, 1000);
 }
 
+// create cards based on user-defined summation target b
 function createCards(totalCardsToCreate) {
 
+    // generate card value combinations for n set of cards. store into card array so it can be referenced for card creation
     for (i = 0; i < (totalCardsToCreate/2); i++) {
         let randomValue = Math.floor(Math.random() * gameState.sumGoal);
         let combiValue = gameState.sumGoal - randomValue; 
@@ -165,14 +178,19 @@ function createCards(totalCardsToCreate) {
         cardArray.push(cardA, cardB);
     }
 
+    // use "CardLabel" attribute to link View (UI element) with Model (Data)
     for (j = 0; j < cardArray.length; j++) {
         cardArray[j].setCardLabel("card " + j);
     };}
 
+// to handle user clicks on game-cards
 function handleMove(evt) {
+    // HTML gamecard is linked to Model through card ID. getting its ID would allow us to call the Model data (ie, via its index in cardArray)
     let idx = parseInt(evt.target.id.replace('card ', ''));
     let clickedCard = cardArray[idx];
     let clickedCardSel = clickedCard.getCardSelection();
+
+    // check if card has already been clicked - unselect if yes, set as first card if not
     if (gameState.firstCardSel != null) {
         if (clickedCardSel === "playerSel") {
             clickedCard.setCardSelection("playerNotSel");
@@ -193,12 +211,14 @@ function handleMove(evt) {
     return;
     }
 
+// to check if selected cards add up to summation goal then update card selection info accordingly
 function checkSum (firstCard, secCard) {
     if (firstCard.getCardValue() + secCard.getCardValue() === gameState.sumGoal) {
         gameState.score +=10;
         firstCard.setCardProfile("inactive", "playerNotSel");
         secCard.setCardProfile("inactive", "playerNotSel");
 
+        // update Model to remove selected cards so that gameState.cardsLeft can retrieve updated array.length info
         let updatedCardArray = cardArray.filter(dropCard);
         function dropCard(card) {
              return card.getCardStatus() == 'active';
@@ -213,6 +233,7 @@ function checkSum (firstCard, secCard) {
     return;
 }
 
+// to check win by checking no. of cards and game tiem left
 function checkWin() {
     clearInterval(gameSel);
     if ((gameState.timeLeft >= 0 && gameState.cardsLeft == 0) || (gameState.timeLeft <= 0 && gameState.cardsLeft > 0)) {
@@ -222,6 +243,7 @@ function checkWin() {
     return;
 }
 
+// to move on to next level or reset
 function nextSteps() {
     if (gameState.timeLeft >= 0 && gameState.cardsLeft == 0 && (gameState.level === game1.getGameLevel() || gameState.level === game2.getGameLevel())) {
         updateGame();
@@ -232,6 +254,7 @@ function nextSteps() {
         };
     }
 
+// to update Model data
 function updateGame() {
     cardArray = [];
     clearInterval(timer);
@@ -266,6 +289,7 @@ function updateGame() {
       }, 1000);
 }
 
+// to reset timer progress bar
 function move() {
     let i = 0;
     if (i == 0) {
@@ -282,12 +306,14 @@ function move() {
     }, 1000);
 };}
 
-function reinitialize() {
+// to handle user click on "game replay"
+function reInitialize() {
     startInstructions.style.display = "block";
     document.getElementById('game-state').style.display = "none";
     nextGame.style.display = "none";
 }
 
+// to render UI for game start
 function renderStartGame() {
     startInstructions.style.display = "none";
     nextGame.style.display = "none";
@@ -295,14 +321,16 @@ function renderStartGame() {
     scoreDisplay.textContent = `Current Score: ${gameState.score}`;
     gameStatus.textContent = 'Your time starts now!';
     replayButton.style.display = "block";
-    renderCreateCards();
+    renderCards();
     gameSel = setTimeout(newMessage, 1000);
 }
 
+// to render UI for mathematical statement
 function newMessage() {
     gameStatus.textContent = `? + ? = ${gameState.sumGoal}`;
 };
 
+// to render UI for end game
 function renderMessage() {
     document.getElementById('game-state').style.display = "none";
     startInstructions.style.display = "none";
@@ -325,11 +353,14 @@ function renderMessage() {
     }
 }
 
-function renderCreateCards() {
+// to render created cards
+function renderCards() {
+    // ensure all HTML elements for the game cards are removed
     while (gameCards.hasChildNodes()) {
         gameCards.removeChild(gameCards.firstChild);
     }
 
+    // create cards based on Model game card info; set the HTML attributes to correspond with the card obj key-values  
     for (let i = 0; i < cardArray.length; i++) {
         let gCard = document.createElement('div');
         gCard.classList.add("cards", cardArray[i].getCardStatus(), cardArray[i].getCardSelection())
@@ -338,19 +369,24 @@ function renderCreateCards() {
         gameCards.appendChild(gCard);
     };
 
+    // shuffle game cards for UI; 
+    // convert the NodeList of cards to an array to facilitate use of shuffle function 
     let cardDisplay = Array.from(gameCards.children);
 
-    // ref: Fisher-Yates shuffle algorithm
+    // define shuffle function (ref: Fisher-Yates shuffle algorithm)
     function shuffleArray(cardDisplay) {
         for (let i = cardDisplay.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [cardDisplay[i], cardDisplay[j]] = [cardDisplay[j], cardDisplay[i]];
         }
     }
+    
     shuffleArray(cardDisplay);
+    // Append the shuffled elements back to the container
     cardDisplay.forEach(card => gameCards.appendChild(card));
 }
 
+// to render mathematical statement based on user clicks on cards (eg, selected card and earlier card selected, if app)
 function renderCardSel(event) {
     let selCard = document.getElementById(event.target.id);
     let firstCard = document.querySelector('.firstCardSel');
@@ -372,15 +408,17 @@ function renderCardSel(event) {
     return;
 }
 
+// to update card deck and game feedback on UI 
 function renderCardStatus (firstCard, secCard) {
     let card1 = document.getElementById(firstCard.getCardLabel());
     let card2 = document.getElementById(secCard.getCardLabel());
 
+    // for checkSum, the two selected cards would already be "active" and "playerSel" so we just replace with whatever status and selection info was assigned in the Model
     card1.classList.replace('active', firstCard.getCardStatus());
     card2.classList.replace('active', secCard.getCardStatus());
     card1.classList.replace('playerSel', firstCard.getCardSelection());
     card2.classList.replace('playerSel', secCard.getCardSelection());
-    card1.classList.remove('firstCardSel');
+    card1.classList.remove('firstCardSel'); //because firstCard in my function arguement is always defined as gameState.firstCardSel
     if (card1.classList.contains('active')) {
         gameStatus.textContent = `That didn't quite add up to ${gameState.sumGoal}. Try again!`;
         gameSel = setTimeout(newMessage, 1500);
