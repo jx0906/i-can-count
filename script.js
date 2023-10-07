@@ -307,7 +307,7 @@ function move() {
 };}
 
 // to handle user click on "game replay"
-function reInitialize() {
+function reinitialize() {
     startInstructions.style.display = "block";
     document.getElementById('game-state').style.display = "none";
     nextGame.style.display = "none";
