@@ -141,7 +141,6 @@ function initialize() {
         const seconds = gameState.timeLeft % 60; 
         if (gameState.timeLeft === 60) {
             timerDisplay.textContent = "";
-            gameStatus.textContent = 'Your time starts now!';
         }
         else {timerDisplay.textContent = `${seconds} s`;}
         gameState.timeLeft--;
@@ -254,7 +253,6 @@ function updateGame() {
         const seconds = gameState.timeLeft % 60; 
         if (gameState.timeLeft === 60) {
             timerDisplay.textContent = "";
-            gameStatus.textContent = 'Your time starts now!'
         }
         else {timerDisplay.textContent = `${seconds} s`;}
         gameState.timeLeft--;
@@ -296,6 +294,7 @@ function renderStartGame() {
     // document.querySelectorAll('.next-game').forEach(a=>a.style.display = "none");
     document.getElementById('game-state').style.display = "flex";
     scoreDisplay.textContent = `Current Score: ${gameState.score}`;
+    gameStatus.textContent = 'Your time starts now!';
     replayButton.style.display = "block";
     renderCreateCards();
     gameSel = setTimeout(newMessage, 1000);
