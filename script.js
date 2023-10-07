@@ -266,6 +266,22 @@ function updateGame() {
       }, 1000);
 }
 
+function move() {
+    let i = 0;
+    if (i == 0) {
+    i = 1;
+    progress = setInterval(function() {
+        let width = 1;
+      if (width >= 100) {
+        clearInterval(progress);
+        i = 0;
+      } else {
+        width+=1.67;
+        timerDisplay.style.width = width + "%";
+      }
+    }, 1000);
+};}
+
 function reinitialize() {
     startInstructions.style.display = "block";
     document.getElementById('game-state').style.display = "none";
@@ -287,22 +303,6 @@ function renderStartGame() {
 function newMessage() {
     gameStatus.textContent = `? + ? = ${gameState.sumGoal}`;
 };
-
-function move() {
-    let i = 0;
-    if (i == 0) {
-    i = 1;
-    progress = setInterval(function() {
-        let width = 1;
-      if (width >= 100) {
-        clearInterval(progress);
-        i = 0;
-      } else {
-        width+=1.67;
-        timerDisplay.style.width = width + "%";
-      }
-    }, 1000);
-};}
 
 function renderMessage() {
     document.getElementById('game-state').style.display = "none";
