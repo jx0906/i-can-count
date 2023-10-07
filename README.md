@@ -26,7 +26,7 @@ _(A) Card selection_
 <img width="935" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/bfa34d55-e499-49fb-b906-c1ba2d957323">
 
 _(B) Successful addition_
-<img width="942" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/3ea8970a-70ae-4782-a0ac-1fe2e78f8b06">
+<img width="942" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/256aaa98-6006-4bbb-84e7-331cf9d2fdd1">
 
 _(C) Incorrect combinations_
 <img width="940" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/fe4a8bf4-6857-45d3-b8b1-770464b99358">
