@@ -292,8 +292,8 @@ function move() {
     let i = 0;
     if (i == 0) {
     i = 1;
-    var width = 1;
     progress = setInterval(function() {
+        let width = 1;
       if (width >= 100) {
         clearInterval(progress);
         i = 0;
