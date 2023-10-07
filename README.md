@@ -12,7 +12,7 @@ Given a deck of cards, choose two cards that add up to 10, or a predetermined nu
 **Screenshots of Game**
 
 _Welcome screen_
-<img width="949" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/27d3084d-645a-4638-9d87-a31f06dce99a">
+<img width="932" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/51312d58-0874-409b-b270-2ff0fdb15a54">
 
 _Option to customise summation goal_
 <img width="916" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/07330f83-bc5c-4922-a5d3-9d99ccb49a2c">
@@ -22,7 +22,7 @@ _Start Game_
 
 _Informative prompts to guide game play throughout_
 
-_(A) Card selection_
+_(A) Card selection, feedback on time left_
 <img width="935" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/bfa34d55-e499-49fb-b906-c1ba2d957323">
 
 _(B) Successful addition_
@@ -43,3 +43,34 @@ b. Allow customisation of arithmetric operation - summation, minus, multiplicati
 c. Have animation for timer progress bar (eg, to show dinosaur catching up with the prey)<br>
 d. Keeping a scoreboard of players' history<br>
 e. Responsive design for UI
+
+## Reflections: Challenges and Learning Points
+
+In retrospect, the game UI, model data and logic weren't difficult to establish and code. What was challenging was the need to link the UI and model data to ensure both were consistent and users get an accurate feedback on the game. I thus spent a significant amount of time at the start to internalise the concepts of rendering and to engineer a way to link the UI elements and data. After much reading and code testing, I finally stumbled on the "Eureka!" moment when I realised I could leverage on HTML element attributes (ie, by setting multiple class attributes). It was a golden realisation as it not only facilitated any interactions I wanted to establish between the UI and data, but also greatly enhanced my ability to control their styling (eg, to display or hide). Having crossed this mindblock, coding for the subsequent functions, including a last-min enhancement to shuffle the card display, definitely became a lot easier, faster and satisfying. 
+
+Here's a sample of the code where I had applied the concept to update the UI based on the user's card selections:
+
+```
+function renderCardSel(event) {
+    let selCard = document.getElementById(event.target.id);
+    let firstCard = document.querySelector('.firstCardSel');
+
+    if (firstCard != null) {
+        if (selCard.classList.contains('playerSel')) {
+        selCard.classList.replace('playerSel', 'playerNotSel');
+        selCard.classList.remove('firstCardSel');
+        newMessage();
+        return;
+    }
+    selCard.classList.replace('playerNotSel', 'playerSel');
+    gameStatus.textContent = `${firstCard.textContent} + ${selCard.textContent} = ${gameState.sumGoal}`;
+    return;
+    }
+    selCard.classList.replace('playerNotSel', 'playerSel');
+    selCard.classList.add("firstCardSel");
+    gameStatus.textContent = `${selCard.textContent} + ? = ${gameState.sumGoal}`;
+    return;
+}
+```
+
+In retrospect, considering the time pressure to deliver the project, it could have been more sensible of me to reach out to fellow classmates who may had resolved similar learning challenges or the instructional team for clarifications rather than let my progress be held back indefinitely by the knowledge gap - will definitely keep this learning point with me for the next project, and life, in general :) 
