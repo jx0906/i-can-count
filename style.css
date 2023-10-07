@@ -91,9 +91,20 @@ border-radius: 4px;
   align-items: center;
 }
 
+#progress-display {
+  width: 100%;
+  height: auto;
+  background-color: transparent;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
 #timer-display {
-  background-clip: border-box;
-  display: block;
+  width: 1%;
+  height: 30px;
+  font-size: 20px;
+  text-align: end;
+  background-color: white;
 }
 
 #replay-button {

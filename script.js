@@ -59,9 +59,11 @@ class card {
         this.selection = newSel;
     };
 }
-// state variables
+
+// variables
 
 let timer;
+let progress;
 
 let gameSel;
 
@@ -97,20 +99,22 @@ nGame.addEventListener('click', nextSteps);
 replayButton.addEventListener('click', reinitialize);
 
 function customize() {
-    document.getElementById('input-feedback').textContent = "";
     clearInterval(timer);
+    clearInterval(progress);
     startInstructions.style.display = "none";
     let summationInput = document.getElementById('summation-input');
     summationInput.style.display = "flex";
+    document.getElementById('input-feedback').textContent = "";
 
     document.getElementById('yes-button').addEventListener("click", function() {
         if (document.getElementById('summation-target').checkValidity()) {
+            document.getElementById('input-feedback').textContent = "";
             gameState.sumGoal = parseInt(document.querySelector('#summation-target').value);        
             summationInput.style.display = "none";
             initialize();
             document.getElementById("form").reset();
         } else {
-        document.getElementById('input-feedback').textContent = "Please enter a valid number from 2 to 100. Leave blank if you prefer to use the default summation value of 10.";
+        document.getElementById('input-feedback').textContent = "Please enter a valid integer from 2 to 100. Leave blank if you prefer to use the default summation value of 10.";
         document.getElementById("form").reset();
     };});
 
@@ -125,12 +129,14 @@ function customize() {
 function initialize() {
     cardArray = [];
     clearInterval(timer);
+    clearInterval(progress); 
     gameState.timeLeft = 60;
     gameState.score = 0;
     gameState.level = game1.getGameLevel();
     gameState.cardsLeft = game1.getTotalGameCards();
     createCards(game1.getTotalGameCards());
     renderStartGame();
+    move();
     timer = setInterval(function () {
         const seconds = gameState.timeLeft % 60; 
         if (gameState.timeLeft === 60) {
@@ -143,12 +149,14 @@ function initialize() {
             timerDisplay.textContent = "TIME'S UP!";
             checkWin();
             clearInterval(timer);
+            clearInterval(progress);
           }
         return;
-      }, 1000); 
+      }, 1000);
 }
 
 function createCards(totalCardsToCreate) {
+
     for (i = 0; i < (totalCardsToCreate/2); i++) {
         let randomValue = Math.floor(Math.random() * gameState.sumGoal);
         let combiValue = gameState.sumGoal - randomValue; 
@@ -156,15 +164,15 @@ function createCards(totalCardsToCreate) {
         let cardB = new card(combiValue, "active", "playerNotSel");
         cardArray.push(cardA, cardB);
     }
+
     for (j = 0; j < cardArray.length; j++) {
-        cardArray[j].setCardLabel("card " + j); 
+        cardArray[j].setCardLabel("card " + j);
     };}
- 
+
 function handleMove(evt) {
     let idx = parseInt(evt.target.id.replace('card ', ''));
     let clickedCard = cardArray[idx];
     let clickedCardSel = clickedCard.getCardSelection();
-
     if (gameState.firstCardSel != null) {
         if (clickedCardSel === "playerSel") {
             clickedCard.setCardSelection("playerNotSel");
@@ -219,7 +227,7 @@ function nextSteps() {
         updateGame();
         return;
         }
-    else { 
+    else {
         reinitialize();
         };
     }
@@ -227,6 +235,7 @@ function nextSteps() {
 function updateGame() {
     cardArray = [];
     clearInterval(timer);
+    clearInterval(progress); 
     gameState.timeLeft = 60;
     if (gameState.level === game2.getGameLevel()) {
         gameState.level = game3.getGameLevel();
@@ -251,12 +260,13 @@ function updateGame() {
             timerDisplay.textContent = "TIME'S UP!";
             checkWin();
             clearInterval(timer);
+            clearInterval(progress); 
           }
       }, 1000);
 }
 
 function reinitialize() {
-    startInstructions.style.display = "block";
+    startInstructions.style.display = "flex";
     document.getElementById('game-state').style.display = "none";
     nextGame.style.display = "none";
 }
@@ -264,6 +274,7 @@ function reinitialize() {
 function renderStartGame() {
     startInstructions.style.display = "none";
     nextGame.style.display = "none";
+    // document.querySelectorAll('.next-game').forEach(a=>a.style.display = "none");
     document.getElementById('game-state').style.display = "flex";
     scoreDisplay.textContent = `Current Score: ${gameState.score}`;
     gameStatus.textContent = 'Your time starts now!'
@@ -275,6 +286,22 @@ function renderStartGame() {
 function newMessage() {
     gameStatus.textContent = `? + ? = ${gameState.sumGoal}`;
 };
+
+function move() {
+    let i = 0;
+    if (i == 0) {
+    i = 1;
+    var width = 1;
+    progress = setInterval(function() {
+      if (width >= 100) {
+        clearInterval(progress);
+        i = 0;
+      } else {
+        width+=1.67;
+        timerDisplay.style.width = width + "%";
+      }
+    }, 1000);
+};}
 
 function renderMessage() {
     document.getElementById('game-state').style.display = "none";
@@ -313,13 +340,13 @@ function renderCreateCards() {
 
     let cardDisplay = Array.from(gameCards.children);
 
+    // ref: Fisher-Yates shuffle algorithm
     function shuffleArray(cardDisplay) {
         for (let i = cardDisplay.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [cardDisplay[i], cardDisplay[j]] = [cardDisplay[j], cardDisplay[i]];
         }
     }
-
     shuffleArray(cardDisplay);
     cardDisplay.forEach(card => gameCards.appendChild(card));
 }
