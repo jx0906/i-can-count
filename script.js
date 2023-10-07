@@ -270,13 +270,13 @@ function move() {
     let i = 0;
     if (i == 0) {
     i = 1;
+    let width = 1;
     progress = setInterval(function() {
-        let width = 1;
       if (width >= 100) {
         clearInterval(progress);
         i = 0;
       } else {
-        width+=1.67;
+        width += 1.67;
         timerDisplay.style.width = width + "%";
       }
     }, 1000);
@@ -291,7 +291,6 @@ function reinitialize() {
 function renderStartGame() {
     startInstructions.style.display = "none";
     nextGame.style.display = "none";
-    // document.querySelectorAll('.next-game').forEach(a=>a.style.display = "none");
     document.getElementById('game-state').style.display = "flex";
     scoreDisplay.textContent = `Current Score: ${gameState.score}`;
     gameStatus.textContent = 'Your time starts now!';
