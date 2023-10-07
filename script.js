@@ -248,6 +248,7 @@ function updateGame() {
         createCards(game2.getTotalGameCards());
     } 
     renderStartGame();
+    move();
     timer = setInterval(function () {
         const seconds = gameState.timeLeft % 60; 
         if (gameState.timeLeft === 60) {
