@@ -35,7 +35,7 @@ _(D) Round-up of game play with score and motivational message_
 <img width="931" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/c26f942d-aba8-4c24-b63b-82cd051320eb">
 <img width="941" alt="image" src="https://github.com/jx0906/jx0906.github.io/assets/142247158/5eb40382-8ecb-44b3-b224-8740f6165f33">
 
-[Link to Game](https://jx0906.github.io/)
+[Link to Game](https://jx0906.github.io/i-can-count/)
 
 ## Planned future enhancements
 a. Add distraction cards<br> 
